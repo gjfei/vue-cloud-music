@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import {getRequestBanner} from '@/api/recommend'
 export default {
   data() {
     return {
@@ -14,6 +15,9 @@ export default {
   },
   components: {
 
+  },
+  created(){
+    getRequestBanner()
   },
   methods: {
 

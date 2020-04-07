@@ -1,19 +1,15 @@
 # vue-cloud-music
 
-## Project setup
 ```
-yarn install
-```
+git clone --recursive https://github.com/gjfei/vue-cloud-music.git
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+npm install
 
-### Compiles and minifies for production
-```
-yarn build
-```
+cd NeteaseCloudMusicApi
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+npm install
+
+cd ..
+
+npm run start
+```

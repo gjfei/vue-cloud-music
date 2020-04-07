@@ -1,17 +1,21 @@
 <template>
   <div class="home">
-    <nav-bar title="网易云" />
-    <tabs-list :tab-list='tabList'></tabs-list>
+    发现
   </div>
 </template>
 
 <script>
 export default {
   name: "Home",
-  data(){
+  data() {
     return {
-      tabList:['tab1','tab1','tab1']
     }
+  },
+  methods: {
+
   }
 }
 </script>
+
+<style scoped lang="scss">
+</style>

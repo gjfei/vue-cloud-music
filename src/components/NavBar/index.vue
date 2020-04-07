@@ -6,8 +6,8 @@
         @click="clickLeft"
       >
         <svg-icon
-          icon-class='arrow'
-          v-if="leftArrow"
+          :icon-class='leftIcon'
+          v-if="leftIcon"
         />
         <slot name='left' />
       </div>
@@ -19,6 +19,10 @@
         class="right"
         @click="clickRight"
       >
+        <svg-icon
+          :icon-class='rightIcon'
+          v-if="rightIcon"
+        />
         <slot name='right' />
       </div>
     </div>
@@ -30,9 +34,13 @@
 export default {
   props: {
     title: String,
-    leftArrow: {
-      type: Boolean,
-      default: false
+    leftIcon: {
+      type: String,
+      default: ''
+    },
+    rightIcon:{
+      type: String,
+      default: ''
     }
   },
   methods: {
@@ -61,8 +69,8 @@ export default {
   .title {
     width: 60%;
     text-align: center;
-    font-size: 28px;
     color: #333;
+    font-size: 34px;
   }
 }
 .empty {

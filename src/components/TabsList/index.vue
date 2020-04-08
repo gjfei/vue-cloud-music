@@ -129,8 +129,8 @@ export default {
   }
   .tab-item {
     flex: 1;
-    font-size: $font-base;
-    color: $font-dark;
+    font-size: $font-color-base;
+    color: $font-color-dark;
     padding: 0 16px;
     box-sizing: border-box;
     line-height: 88px;

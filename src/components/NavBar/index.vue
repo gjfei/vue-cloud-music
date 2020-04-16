@@ -11,8 +11,8 @@
         />
         <slot name='left' />
       </div>
-      <div class="title">
-        {{title}}
+      <div :class="'title-'+titleAlign">
+        {{$slots.title?'':title}}
         <slot name='title' />
       </div>
       <div
@@ -26,7 +26,7 @@
         <slot name='right' />
       </div>
     </div>
-    <div class="empty"></div>
+    <div class="placeholder" v-if="placeholder"></div>
   </div>
 </template>
 
@@ -38,9 +38,20 @@ export default {
       type: String,
       default: ''
     },
-    rightIcon:{
+    rightIcon: {
       type: String,
       default: ''
+    },
+    titleAlign: {
+      type: String,
+      default: 'center',
+      validator: value => {
+        return ['center', 'left', 'right'].indexOf(value) !== -1
+      }
+    },
+    placeholder:{
+      type:Boolean,
+      default:true
     }
   },
   methods: {
@@ -67,13 +78,27 @@ export default {
   right: 0;
   z-index: 9;
   .title {
-    width: 60%;
-    text-align: center;
     color: #333;
     font-size: 34px;
+    &-left {
+      flex: 1;
+      text-align: left;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    &-center {
+      width: 60%;
+      text-align: center;
+    }
+    &-right {
+      flex: 1;
+      text-align: right;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
   }
 }
-.empty {
+.placeholder {
   width: 100%;
   height: 88px;
 }

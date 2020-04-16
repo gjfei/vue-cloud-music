@@ -27,55 +27,41 @@
       ></div>
     </swiper>
     <div class="nav-box flex-align-center">
-      <div class="box-item">
+      <div
+        class="box-item"
+        v-for="item in navList"
+        :key='item.name'
+        @click="switchPage(item.path)"
+      >
         <div class="icon">
           <svg-icon
-            iconClass='song-list'
+            :icon-class='item.iconClass'
             fill='#fff'
           />
         </div>
-        <div class="name">歌单</div>
-      </div>
-      <div class="box-item">
-        <div class="icon">
-          <svg-icon
-            iconClass='rank'
-            fill='#fff'
-          />
-        </div>
-        <div class="name">排行</div>
-      </div>
-      <div class="box-item">
-        <div class="icon">
-          <svg-icon
-            iconClass='microphone'
-            fill='#fff'
-          />
-        </div>
-        <div class="name">歌手</div>
-      </div>
-      <div class="box-item">
-        <div class="icon">
-          <svg-icon
-            iconClass='station'
-            fill='#fff'
-          />
-        </div>
-        <div class="name">电台</div>
+        <div class="name">{{item.name}}</div>
       </div>
     </div>
     <div class="recommend-list">
       <h1 class="title">推荐歌单</h1>
-      <play-list-card />
+      <div class="list">
+        <play-list-card
+          v-for="item in playList"
+          :key='item.id'
+          :imgUrl='item.picUrl'
+          :name='item.name'
+          :playCount='item.playCount'
+          @click.native="goDetail(item.id)"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
-import { getRequestBanner } from '@/api/recommend'
-import playListCard from '@/components/PlayList/card'
+import { getRequestBanner, getRequestRecommendList } from '@/api/recommend'
+import PlayListCard from '@/components/PlayList/card'
 export default {
   data() {
     return {
@@ -89,13 +75,31 @@ export default {
           el: '.swiper-pagination'
         }
       },
-      bannerList: []
+      bannerList: [],
+      navList: [{
+        name: '歌单',
+        iconClass: 'song-list',
+        path: '/play-list'
+      }, {
+        name: '排行',
+        iconClass: 'rank',
+        path: '/'
+      }, {
+        name: '歌手',
+        iconClass: 'microphone',
+        path: '/'
+      }, {
+        name: '电台',
+        iconClass: 'station',
+        path: '/'
+      }],
+      playList: []
     }
   },
   components: {
     Swiper,
     SwiperSlide,
-    playListCard
+    PlayListCard
   },
   computed: {
     swiper() {
@@ -104,11 +108,27 @@ export default {
   },
   created() {
     this.getBannerList()
+    this.getRecommendList()
   },
   methods: {
+    getRecommendList() {
+      getRequestRecommendList().then(res => {
+        this.playList = res.result
+      })
+    },
     getBannerList() {
       getRequestBanner().then(res => {
         this.bannerList = res.banners
+      })
+    },
+    goDetail(id) {
+      this.$router.push({
+        path: `/play-list-detail/${id}`
+      })
+    },
+    switchPage(path) {
+      this.$router.push({
+        path
       })
     }
   }
@@ -162,7 +182,19 @@ export default {
 .recommend-list {
   .title {
     font-size: $font-lg;
-    padding-left: 24px;
+    padding: 24px 24px 0;
+    box-sizing: border-box;
+  }
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 15px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    height: 100%;
+    ::v-deep .card {
+      margin: 8px;
+    }
   }
 }
 </style>

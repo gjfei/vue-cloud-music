@@ -1,5 +1,6 @@
 <template>
-  <div
+  <div class="nav">
+    <div
     class="flex-align-center tab-list"
     ref="tabList"
   >
@@ -16,11 +17,14 @@
       class="tab-line"
       v-if="showLine"
       :style="tabItemSize[tabIndex]"
+      ref="tabLine"
     ></div>
+  </div>
   </div>
 </template>
 
 <script>
+import { setScrollLeft } from '@/utils'
 export default {
   data() {
     return {
@@ -40,7 +44,8 @@ export default {
       default: ''
     },
     current: {
-      type: Number
+      type: Number,
+      default: 0
     },
     inactiveStyle: {
       type: Object,
@@ -57,6 +62,10 @@ export default {
     showLine: {
       type: Boolean,
       default: true
+    },
+    routeModel: {
+      type: Boolean,
+      default: false
     }
   },
   created() {
@@ -66,52 +75,62 @@ export default {
     current(val, oldVal) {
       this.tabIndex = val
       this.switchRoute()
-    }
-  },
-  mounted() {
-    if (this.showLine) {
-      this.initTabLine()
+    },
+    tabList() {
+      this.$nextTick(() => {
+        this.initTabLine()
+      })
     }
   },
   methods: {
     // 设置初始化tabIndex,优先匹配path路径优先
-    initTabs(){
+    initTabs() {
       this.tabIndex = this.current
-      this.tabList.forEach((item,index)=>{
-        if(item.path===this.$route.path){
+      this.tabList.forEach((item, index) => {
+        if (item.path === this.$route.path) {
           this.tabIndex = index
         }
       })
     },
     // 设置线的位置以及宽度
     initTabLine() {
-      const tabItem = this.$refs.tabItemText
-      const tabItemSize = []
-      tabItem.forEach(item => {
-        const size = {
-          width: item.offsetWidth + 8 + 'px',
-          transform: `translateX(${item.offsetLeft - 4}px)`
-        }
-        tabItemSize.push(size)
-      })
-      this.tabItemSize = tabItemSize
+      if (this.showLine) {
+        const tabItem = this.$refs.tabItemText
+        const tabItemSize = []
+        tabItem.forEach(item => {
+          const size = {
+            width: item.offsetWidth + 8 + 'px',
+            transform: `translateX(${item.offsetLeft - 4}px)`
+          }
+          tabItemSize.push(size)
+        })
+        this.tabItemSize = tabItemSize
+      }
     },
     // 点击tab
     selectTab(index) {
       if (index !== this.tabIndex) {
         this.tabIndex = index
+        // 设置滚动位置
+        const { tabItemText, tabList } = this.$refs
+        const to = tabItemText[index].offsetLeft - (tabList.offsetWidth - tabItemText[index].offsetWidth) / 2
+        const from = tabList.scrollLeft
+        setScrollLeft(this.$refs.tabList, to, from)
+
         this.$emit('change', index)
         this.switchRoute()
       }
     },
     // 切换路由
-    switchRoute(){
-      const nowPath =  this.$route.path
-      const path = this.tabList[this.tabIndex].path||''
-      if(nowPath!=path){
-        this.$router.push({
-          path:this.tabList[this.tabIndex].path
-        })
+    switchRoute() {
+      if (this.routeModel) {
+        const nowPath = this.$route.path
+        const path = this.tabList[this.tabIndex].path || ''
+        if (nowPath != path) {
+          this.$router.push({
+            path: this.tabList[this.tabIndex].path
+          })
+        }
       }
     }
   }
@@ -119,11 +138,18 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.tab-list {
-  height: 88px;
-  overflow: hidden;
-  overflow-x: auto;
+.nav {
   position: relative;
+  width: 100%;
+  height: 88px;
+}
+.tab-list {
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -145,7 +171,7 @@ export default {
     background-color: $red;
     position: absolute;
     bottom: 0;
-    transition: 0.3s;
+    transition: all 0.3s linear;
   }
 }
 </style>

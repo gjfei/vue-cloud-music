@@ -3,11 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import fastclick from 'fastclick';
-import VueLazyload from 'vue-lazyload'
 
 import 'normalize.css/normalize.css'
 import '@/styles/index.scss'
 import '@/styles/variables.scss'
+import 'swiper/css/swiper.css'
+
 import './icons'
 
 import navBar from '@/components/NavBar'
@@ -17,8 +18,6 @@ Vue.component('nav-bar',navBar)
 Vue.component('tabs-list',TabsList)
 
 fastclick.attach(document.body)
-
-Vue.use(VueLazyload)
 
 
 Vue.config.productionTip = false

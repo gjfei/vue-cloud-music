@@ -16,7 +16,8 @@ module.exports = {
         .loader('style-resources-loader')
         .options({
           patterns: [
-            path.resolve(__dirname, './src/styles/variables.scss')
+            path.resolve(__dirname, './src/styles/variables.scss'),
+            path.resolve(__dirname, './src/styles/mixin.scss')
           ]
         })
     })

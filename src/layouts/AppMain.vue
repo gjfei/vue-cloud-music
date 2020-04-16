@@ -1,9 +1,9 @@
 <template>
   <div>
-    <nav-bar>
+    <nav-bar title="1">
       <svg-icon
         slot="left"
-        iconClass='menu'
+        icon-class='menu'
         fill='#666'
       />
       <tabs-list
@@ -11,11 +11,12 @@
         :tab-list='tabList'
         :showLine='false'
         :activeStyle='activeStyle'
+        routeModel
         tab-key='title'
       />
       <svg-icon
         slot="right"
-        iconClass='search'
+        icon-class='search'
         fill='#666'
       />
     </nav-bar>

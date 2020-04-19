@@ -63,6 +63,7 @@ import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { getRequestBanner, getRequestRecommendList } from '@/api/recommend'
 import PlayListCard from '@/components/PlayList/card'
 export default {
+  name:'Recommend',
   data() {
     return {
       swiperOptions: {

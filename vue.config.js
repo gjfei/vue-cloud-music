@@ -6,7 +6,16 @@ function resolve(dir) {
 }
 module.exports = {
   devServer: {
-    open: true
+    open: true,
+    proxy: {
+      '/api': {
+        target: ' http://localhost:3000',
+        changeOrigin: true,     // target是域名的话，需要这个参数，
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
   },
   chainWebpack(config) {
     // 添加全局scss文件

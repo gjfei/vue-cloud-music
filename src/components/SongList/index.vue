@@ -56,7 +56,6 @@ export default {
 
 <style scoped lang="scss">
 .song-list {
-  background-color: #fff;
   .header {
     height: 88px;
     padding: 0 10px 0 24px;
@@ -66,6 +65,7 @@ export default {
     top: 88px;
     background-color: #fff;
     border-radius: 44px 44px 0 0;
+    z-index: 2;
     .icon {
       font-size: 48px;
     }

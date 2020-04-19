@@ -32,6 +32,7 @@ import { getRequestPlayListCatlist } from '@/api/playList'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import PlayList from '@/components/PlayList'
 export default {
+  name: 'PlayList',
   data() {
     return {
       tabList: [],

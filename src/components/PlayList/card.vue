@@ -84,6 +84,7 @@ export default {
 }
 .card {
   width: 224px;
+  height: 300px;
 }
 .img-wrapper {
   width: 224px;
@@ -130,7 +131,6 @@ export default {
   }
 }
 .name {
-  height: 100px;
   padding-top: 15px;
   box-sizing: border-box;
   font-size: $font-sm;

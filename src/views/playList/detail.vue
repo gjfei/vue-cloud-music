@@ -12,7 +12,7 @@
       />
       <notice-bar
         slot="title"
-        :text='title'
+        :text='navTitle'
         color='#fff'
       />
     </nav-bar>
@@ -25,9 +25,17 @@
         <div
           class="background"
           ref="coverImgUrl"
-          :style="{backgroundImage:`url(${detail.coverImgUrl+'?param=750y750'})`}"
+          :style="{backgroundImage:`url(${detail.coverImgUrl+'?param=750y594'})`}"
         >
         </div>
+        <div
+          class="nav-background"
+          :style="{backgroundImage:`url(${detail.coverImgUrl+'?param=750y594'})`,opacity:navOpacity}"
+        ></div>
+        <div
+          class="nav-background-white"
+          :style="{opacity:navOpacity}"
+        ></div>
         <div
           class="info flex-align-center"
           ref="coverImgUrl"
@@ -98,10 +106,10 @@ import SongList from '@/components/SongList'
 import { getRequestPlayListDetail } from '@/api/playList'
 // import Grade from 'grade-js'
 export default {
+  name: 'PlayListDetail',
   data() {
     return {
       id: '',
-      title: '歌单',
       menuList: [{
         iconName: 'comment',
         tips: '0'
@@ -116,12 +124,18 @@ export default {
         tips: '多选'
       }],
       detail: null,
-      songListTop: 275
+      songListTop: 275,
+      navOpacity: 0
     }
   },
   components: {
     NoticeBar,
     SongList
+  },
+  computed: {
+    navTitle() {
+      return this.navOpacity >= 1 ? this.detail.name : '歌单'
+    }
   },
   created() {
     this.getPlayListDetail()
@@ -146,7 +160,11 @@ export default {
     handleScroll() {
       //获取滚动时的高度
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-      console.log(scrollTop)
+      if (scrollTop > this.songListTop * 0.5) {
+        this.navOpacity = (2 * scrollTop - this.songListTop) / this.songListTop
+      } else {
+        this.navOpacity = 0
+      }
     }
   }
 }
@@ -158,15 +176,35 @@ export default {
 }
 .header {
   width: 750px;
-  height: 750px;
+  height: 594px;
   position: relative;
   .background {
     width: 100%;
     height: 100%;
     position: absolute;
     filter: blur(15px);
-    background-position: 0% 0%;
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
     z-index: -1;
+  }
+  .nav-background-white,
+  .nav-background {
+    width: 750px;
+    height: 132px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    filter: blur(15px);
+    background-size: 100%;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    z-index: 1;
+  }
+  .nav-background-white {
+    background-color: #fff;
+    filter: blur(0);
+    z-index: 0;
   }
   .info {
     padding: 120px 40px 40px;
@@ -232,6 +270,6 @@ export default {
   }
 }
 .list {
-  margin-top: -200px;
+  margin-top: -44px;
 }
 </style>

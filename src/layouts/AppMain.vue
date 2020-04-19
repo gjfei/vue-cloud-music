@@ -28,6 +28,7 @@
 
 <script>
 export default {
+  name: 'AppMain',
   data() {
     return {
       tabList: [{ title: '推荐', path: '/' }, { title: '发现', path: '/discover' }, { title: '云村', path: '/clould-village' }, { title: '视频', path: '/video' }],

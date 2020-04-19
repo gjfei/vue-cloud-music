@@ -67,12 +67,12 @@ export default {
 
 <style scoped lang="scss">
 .nav-bar {
+  background-color: #ffffff;
   height: 89px;
   justify-content: space-between;
   padding: 0 32px;
   box-sizing: border-box;
   position: fixed;
-  background-color: #fff;
   top: 0;
   left: 0;
   right: 0;

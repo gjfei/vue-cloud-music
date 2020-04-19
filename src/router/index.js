@@ -7,11 +7,11 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'AppMain',
     component: AppMain,
     children: [
       {
         path: '/',
+        name: 'Recommend',
         component: () => import('@/views/appMain/recommend'),
         meta: {
           title: '推荐'
@@ -19,6 +19,7 @@ const routes = [
       },
       {
         path: '/discover',
+        name: 'Discover',
         component: () => import('@/views/appMain/discover'),
         meta: {
           title: '发现'
@@ -26,6 +27,7 @@ const routes = [
       },
       {
         path: '/clould-village',
+        name: 'ClouldVillage',
         component: () => import('@/views/appMain/clould-village'),
         meta: {
           title: '云村'
@@ -33,6 +35,7 @@ const routes = [
       },
       {
         path: '/video',
+        name: 'Video',
         component: () => import('@/views/appMain/video'),
         meta: {
           title: '视频'
@@ -41,11 +44,11 @@ const routes = [
     ]
   }, {
     path: '/',
-    name: 'InsidePage',
     component: InsidePage,
     children: [
       {
         path: '/play-list',
+        name: 'PlayList',
         component: () => import('@/views/playList/index.vue'),
         meta: {
           title: '歌单广场'

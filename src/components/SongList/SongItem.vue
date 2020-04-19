@@ -31,8 +31,7 @@ export default {
   props: {
     index:[Number,String],
     name:{
-      type:String,
-      required:true
+      type:String
     },
     singer:String,
     album:String
@@ -52,6 +51,7 @@ export default {
   height: 120px;
   padding: 0 24px;
   box-sizing: border-box;
+  background-color: #fff;
   .left {
     width: 68px;
     height: 68px;
@@ -67,6 +67,7 @@ export default {
     flex: 1;
     padding-right: 20px;
     box-sizing: border-box;
+    overflow: hidden;
     .name {
       color: $font-color-base;
       font-size: $font-lg;

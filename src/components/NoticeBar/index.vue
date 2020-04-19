@@ -12,7 +12,7 @@
         @animationend='onAnimationEnd'
         @webkit-animation-end='onAnimationEnd'
       >
-        {{text}}
+        {{contentText}}
       </div>
     </div>
   </div>
@@ -26,7 +26,8 @@ export default {
       wrapWidth: 0,
       offsetWidth: 0,
       firstRound: true,
-      animationClass: ''
+      animationClass: '',
+      contentText:'',
     }
   },
   props: {
@@ -51,6 +52,9 @@ export default {
       default:'transparent'
     }
   },
+  created(){
+    this.contentText = this.text
+  },
   computed: {
     contentStyle() {
       const style = {
@@ -63,7 +67,8 @@ export default {
   },
   watch: {
     text: {
-      handler() {
+      handler(val) {
+        this.contentText = val
         this.$nextTick(() => {
           const { wrap, content } = this.$refs
           if (!wrap || !content) {
@@ -76,6 +81,8 @@ export default {
             this.offsetWidth = offsetWidth
             this.duration = offsetWidth / this.speed
             this.animationClass = 'play'
+          }else {
+            this.animationClass = ''
           }
         })
       },

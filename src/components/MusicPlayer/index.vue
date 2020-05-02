@@ -1,43 +1,129 @@
 <template>
   <div class="music-player">
-    <div class="min-player flex-align-center">
-      <img
-        src=""
-        alt="music"
-        class="music-cover"
-      >
-      <div class="music-info">
-        <div class="music-name">歌曲名</div>
-        <div class="music-singer">作者</div>
-      </div>
-      <div class="player-btn">
-        <ProgressBar
-          type='circle'
-          :percentage='percentage'
-        />
-      </div>
-      <div class="">播放</div>
+    <div v-if="playerInfo.songList.length>0">
+      <full-screen-player
+        v-if="playerInfo.fullScreen"
+        @setProgress='setProgress'
+      />
+      <mini-player v-else />
     </div>
-    <div class="placeholder"></div>
+    <audio
+      :src="audioSrc"
+      ref="audioRef"
+      @timeupdate='updateTime'
+      @canplay='getDuration'
+      @ended="playEnd"
+      @error="playErro"
+      v-show="true"
+    ></audio>
   </div>
 </template>
 
 <script>
-import ProgressBar from '@/components/ProgressBar'
+import MiniPlayer from './MiniPlayer'
+import FullScreenPlayer from './FullScreenPlayer'
+import { getRandomInt } from '@/utils'
+import lyricParser from './utils/lyricParser'
+import { mapState, mapMutations } from 'vuex'
+import { getRequestSongUrl, getRequestLyric } from '@/api/songPlayer'
 export default {
   data() {
     return {
-      percentage: 50
+      isFullScreen: true,
+      audioSrc: '',
+      duration: 0,
+      currentTime: 0,
+      status: true
     }
   },
   components: {
-    ProgressBar
+    MiniPlayer,
+    FullScreenPlayer
   },
-  mounted() {
+  computed: {
+    ...mapState(['playerInfo']),
+  },
+  watch: {
+    'playerInfo.playerStatus'(val) {
+      // 监听播放状态
+      if (this.$refs.audioRef) {
+        if (val) {
+          this.$refs.audioRef.play()
+        } else {
+          this.$refs.audioRef.pause()
+        }
+      }
+    },
+    // 歌曲id改变之后播放
+    'playerInfo.songId'(val) {
+      this.audioSrc = getRequestSongUrl(val)
 
+      this.getLyric()
+
+      this.$nextTick(() => {
+        this.$refs.audioRef.play()
+      })
+    }
   },
   methods: {
+    ...mapMutations(['setSongDuration', 'setSongCurrentTime', 'setPlayerStatus', 'setSongIndex', 'setSongLyricList']),
 
+    getSongUrl() {
+      this.audioSrc = getRequestSongUrl(this.playerInfo.songId)
+    },
+    // 获取歌词
+    getLyric() {
+      getRequestLyric(this.playerInfo.songId).then(res => {
+        let lyricList = []
+        if (res.lrc && res.lrc.lyric) {
+          lyricList = lyricParser(res.lrc.lyric)
+        } else {
+          lyricList = [{
+            time: 0,
+            text: '纯音乐，请欣赏'
+          }]
+        }
+        this.setSongLyricList(lyricList)
+      })
+    },
+    // 实时更新播放时间
+    updateTime(e) {
+      this.setSongCurrentTime(e.target.currentTime)
+    },
+    // 获取歌曲时长
+    getDuration() {
+      this.setSongDuration(this.$refs.audioRef.duration)
+    },
+    setProgress(val) {
+      this.$refs.audioRef.currentTime = val / 100 * this.playerInfo.duration
+    },
+    // 播放结束
+    playEnd() {
+      // 0:顺序循环,1:单曲循环,2:随机播放 
+      const { playerMode, songIndex, songList } = this.playerInfo
+      let index = 0
+      switch (playerMode) {
+        case 0:
+          index = songIndex === songList.length - 1 ? 0 : songIndex + 1
+          break;
+        case 1:
+          index = songIndex
+          break;
+        default:
+          index = getRandomInt(0, songList.length - 1)
+      }
+      // 跳过不能播放的歌曲
+      if (songList[index].dis) {
+        index = index === songList.length - 1 ? 0 : index + 1
+      }
+
+      this.setSongIndex(index)
+    },
+    playErro(e) {
+      // if (this.playerInfo.songId) {
+      //   alert('播放失败')
+      // }
+    }
   }
 }
 </script>

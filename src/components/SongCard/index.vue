@@ -1,5 +1,8 @@
 <template>
-  <div class="song-item flex-align-center">
+  <div
+    class="song-item flex-align-center"
+    :class="{disabled:disabled}"
+  >
     <div class="left flex-align-center">
       <div class="index">
         {{index}}
@@ -15,8 +18,7 @@
     </div>
     <svg-icon
       class="icon"
-      iconClass='play-square'
-      fill='#999'
+      iconClass='stop-square'
     />
   </div>
 </template>
@@ -29,12 +31,17 @@ export default {
     }
   },
   props: {
-    index:[Number,String],
-    name:{
-      type:String
+    index: [Number, String],
+    name: {
+      type: String,
+      required: true
     },
-    singer:String,
-    album:String
+    singer: String,
+    album: String,
+    disabled: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {
 
@@ -52,10 +59,13 @@ export default {
   padding: 0 24px;
   box-sizing: border-box;
   background-color: #fff;
+  color: $font-color-base;
+  &.disabled {
+    color: $font-color-disabled;
+  }
   .left {
     width: 68px;
     height: 68px;
-    color: $font-color-base;
     font-size: $font-base;
     .index {
       width: 48px;
@@ -69,13 +79,10 @@ export default {
     box-sizing: border-box;
     overflow: hidden;
     .name {
-      color: $font-color-base;
       font-size: $font-lg;
       @include text-ellipsis(1);
     }
     .desc {
-      color: $font-color-base;
-      font-size: $font-base;
       margin-top: 15px;
       @include text-ellipsis(1);
     }

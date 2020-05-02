@@ -48,7 +48,7 @@ const routes = [
     children: [
       {
         path: '/play-list',
-        name: 'PlayList',
+        name: 'PlayListPage',
         component: () => import('@/views/playList/index.vue'),
         meta: {
           title: '歌单广场'

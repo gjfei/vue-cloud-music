@@ -13,15 +13,7 @@ export default {
 </script>
 <style lang="scss">
 ::-webkit-scrollbar {
-  display: none;
-}
-::-webkit-scrollbar-thumb {
-  display: none;
-}
-::-webkit-scrollbar-track {
-  display: none;
-}
-::-webkit-scrollbar-track-piece {
-  display: none;
+  width: 0;
+  background: transparent;
 }
 </style>

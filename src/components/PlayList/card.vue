@@ -10,7 +10,7 @@
         @error='loadError'
       >
       <div class="play-count">
-        <svg-icon icon-class='play' />
+        <svg-icon icon-class='stop' />
         {{Math.floor(playCount/10000)}}万
       </div>
       <div

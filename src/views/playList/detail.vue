@@ -48,7 +48,7 @@
               :src="detail.coverImgUrl+'?param=240y240'"
             >
             <div class="play-count">
-              <svg-icon icon-class='play' />
+              <svg-icon icon-class='stop' />
               {{Math.floor(detail.playCount/10000)}}万
             </div>
           </div>
@@ -91,9 +91,34 @@
         class="list"
         ref='songListRef'
       >
-        <SongList
-          :songList='detail.tracks'
-          :subscribedCount='detail.subscribedCount'
+        <div class="list-top flex-align-center">
+          <div
+            class="flex-align-center"
+            @click="playMusic"
+          >
+            <svg-icon
+              iconClass='stop-border'
+              class="icon"
+            />
+            <div class="title">播放全部<span>(共{{detail.tracks.length}}首)</span></div>
+          </div>
+          <div class="collect">
+            <svg-icon
+              iconClass='add'
+              fill='#fff'
+            />
+            收藏({{detail.subscribedCount}})
+          </div>
+        </div>
+        <song-card
+          v-for="(item,index) in detail.tracks"
+          :key="item.id"
+          :index='index+1'
+          :name='item.name'
+          :singer='item.ar[0].name'
+          :album='item.al.name'
+          :disabled='item.dis'
+          @click.stop.native="playMusic(index)"
         />
       </div>
     </div>
@@ -102,8 +127,9 @@
 
 <script>
 import NoticeBar from '@/components/NoticeBar'
-import SongList from '@/components/SongList'
+import SongCard from '@/components/SongCard'
 import { getRequestPlayListDetail } from '@/api/playList'
+import { mapMutations } from 'vuex'
 // import Grade from 'grade-js'
 export default {
   name: 'PlayListDetail',
@@ -130,7 +156,7 @@ export default {
   },
   components: {
     NoticeBar,
-    SongList
+    SongCard
   },
   computed: {
     navTitle() {
@@ -147,10 +173,21 @@ export default {
     document.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
+    ...mapMutations(['setSongList', 'setSongIndex', 'setPlayerStatus']),
     getPlayListDetail() {
       getRequestPlayListDetail(this.$route.params.id).then(res => {
         this.$set(this.menuList[0], 'tips', res.playlist.commentCount)
         this.$set(this.menuList[1], 'tips', res.playlist.shareCount)
+        // 判断不能播放的歌曲
+        const fee = [1, 4, 16]
+        const st = [-1, -200]
+        res.playlist.tracks.forEach(item => {
+          if (fee.indexOf(item.fee) != -1 || st.indexOf(item.st) != -1) {
+            item.dis = true
+          } else {
+            item.dis = false
+          }
+        });
         this.detail = res.playlist
         this.$nextTick(() => {
           this.songListTop = this.$refs.songListRef.getBoundingClientRect().top
@@ -165,6 +202,14 @@ export default {
       } else {
         this.navOpacity = 0
       }
+    },
+    playMusic(index = 0) {
+      this.setSongList(this.detail.tracks)
+      this.setSongIndex(index)
+      // 延迟播放
+      this.$nextTick(() => {
+        this.setPlayerStatus(true)
+      })
     }
   }
 }
@@ -271,5 +316,37 @@ export default {
 }
 .list {
   margin-top: -44px;
+  .list-top {
+    height: 88px;
+    padding: 0 10px 0 24px;
+    box-sizing: border-box;
+    color: $font-color-dark;
+    position: sticky;
+    top: 88px;
+    background-color: #fff;
+    border-radius: 44px 44px 0 0;
+    justify-content: space-between;
+    z-index: 2;
+    .icon {
+      font-size: 48px;
+    }
+    .title {
+      font-size: $font-lg;
+      margin-left: 20px;
+      span {
+        font-size: $font-sm;
+        color: $font-color-light;
+      }
+    }
+    .collect {
+      height: 68px;
+      border-radius: 34px;
+      background-color: $red;
+      color: $font-color-pale;
+      font-size: $font-sm;
+      line-height: 68px;
+      padding: 0 20px;
+    }
+  }
 }
 </style>

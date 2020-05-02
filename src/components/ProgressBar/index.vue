@@ -5,6 +5,8 @@
       class="progress-line flex-align-center"
       :style="barStyle"
       v-if="type==='line'"
+      ref="progressLineRef"
+      @click="onClick"
     >
       <div
         class="progress-bar"
@@ -12,6 +14,7 @@
       />
       <div
         class="dot"
+        @touchmove.stop="onTouchMove"
         :style="dotStyle"
       />
     </div>
@@ -62,8 +65,7 @@ export default {
     percentage: {
       type: Number,
       default: 10,
-      required: true,
-      validator: val => val >= 0 && val <= 100
+      required: true
     },
     stroke: {
       type: String,
@@ -79,6 +81,16 @@ export default {
     }
   },
   computed: {
+    // percentage: {
+    //   get() {
+    //     console.log(this.value)
+    //     return this.value
+    //   },
+    //   set(val) {
+    //     console.log(val)
+    //     return val
+    //   }
+    // },
     radius() {
       if (this.type === 'circle') {
         return parseInt(50 - parseFloat(this.strokeWidth) / 2, 10)
@@ -127,11 +139,29 @@ export default {
         marginLeft: -strokeWidth / 7.5 + 'vw',
         zIndex: 1
       }
+    },
+    progressLineRef() {
+      return this.$refs.progressLineRef
     }
   },
   mounted() {
     if (this.type === 'circle') {
       this.pathRefLength = this.$refs.pathRef.getTotalLength()
+    }
+  },
+  methods: {
+    onClick(e) {
+      const { progressLineRef } = this
+      const rect = progressLineRef.getBoundingClientRect()
+      const percentage = (e.pageX - rect.left) / rect.width * 100
+      this.$emit('change', percentage)
+    },
+    onTouchMove(e) {
+      const { progressLineRef } = this
+      const rect = progressLineRef.getBoundingClientRect()
+      const limit = Math.min(Math.max(0, e.touches[0].pageX - rect.left), rect.width)
+      const percentage = limit / rect.width * 100
+      this.$emit('change', percentage)
     }
   }
 }
@@ -146,6 +176,11 @@ export default {
     width: 100%;
   }
   &-bar {
+    height: 100%;
+    position: relative;
+  }
+  &-circle {
+    width: 100%;
     height: 100%;
     position: relative;
   }

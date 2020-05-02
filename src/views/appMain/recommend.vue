@@ -63,7 +63,7 @@ import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { getRequestBanner, getRequestRecommendList } from '@/api/recommend'
 import PlayListCard from '@/components/PlayList/card'
 export default {
-  name:'Recommend',
+  name: 'Recommend',
   data() {
     return {
       swiperOptions: {
@@ -79,7 +79,7 @@ export default {
       bannerList: [],
       navList: [{
         name: '歌单',
-        iconClass: 'song-list',
+        iconClass: 'play-list',
         path: '/play-list'
       }, {
         name: '排行',

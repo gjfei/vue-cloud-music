@@ -11,7 +11,7 @@
         />
         <slot name='left' />
       </div>
-      <div :class="'title-'+titleAlign">
+      <div :class="'title ' + titleAlign">
         {{$slots.title?'':title}}
         <slot name='title' />
       </div>
@@ -67,9 +67,10 @@ export default {
 
 <style scoped lang="scss">
 .nav-bar {
-  background-color: #ffffff;
+  width: 100vw;
   height: 89px;
   justify-content: space-between;
+  background-color: #ffffff;
   padding: 0 32px;
   box-sizing: border-box;
   position: fixed;
@@ -80,17 +81,17 @@ export default {
   .title {
     color: #333;
     font-size: 34px;
-    &-left {
+    &.left {
       flex: 1;
       text-align: left;
       padding: 0 20px;
       box-sizing: border-box;
     }
-    &-center {
+    &.center {
       width: 60%;
       text-align: center;
     }
-    &-right {
+    &.right {
       flex: 1;
       text-align: right;
       padding: 0 20px;
@@ -99,7 +100,7 @@ export default {
   }
 }
 .placeholder {
-  width: 100%;
+  width: 100vw;
   height: 88px;
 }
 </style>

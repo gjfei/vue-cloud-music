@@ -9,8 +9,8 @@
     "start": "npm-run-all --parallel serve api"
   },
   "dependencies": {
+    "@better-scroll/core": "^2.0.0-beta.6",
     "axios": "^0.19.2",
-    "better-scroll": "^1.15.2",
     "core-js": "^3.6.4",
     "fastclick": "^1.0.6",
     "grade-js": "^1.0.10",

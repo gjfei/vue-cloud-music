@@ -1,25 +1,25 @@
 <template>
   <div class="nav">
     <div
-    class="flex-align-center tab-list"
-    ref="tabList"
-  >
-    <div
-      :class="['tab-item',{active:tabIndex===index}]"
-      :style="[tabIndex===index?activeStyle:inactiveStyle]"
-      v-for="(item,index) in tabList"
-      :key='index'
-      @click="selectTab(index)"
+      class="flex-align-center tab-list"
+      ref="tabList"
     >
-      <span ref="tabItemText">{{tabKey?item[tabKey]:item}}</span>
+      <div
+        :class="['tab-item',{active:tabIndex===index}]"
+        :style="[tabIndex===index?activeStyle:inactiveStyle]"
+        v-for="(item,index) in tabList"
+        :key='index'
+        @click="selectTab(index)"
+      >
+        <span ref="tabItemText">{{tabKey?item[tabKey]:item}}</span>
+      </div>
+      <div
+        class="tab-line"
+        v-if="showLine"
+        :style="tabItemSize[tabIndex]"
+        ref="tabLine"
+      ></div>
     </div>
-    <div
-      class="tab-line"
-      v-if="showLine"
-      :style="tabItemSize[tabIndex]"
-      ref="tabLine"
-    ></div>
-  </div>
   </div>
 </template>
 
@@ -76,6 +76,13 @@ export default {
       this.tabIndex = val
       this.switchRoute()
     },
+    tabIndex(val) {
+      // 设置滚动位置
+      const { tabItemText, tabList } = this.$refs
+      const to = tabItemText[val].offsetLeft - (tabList.offsetWidth - tabItemText[val].offsetWidth) / 2
+      const from = tabList.scrollLeft
+      setScrollLeft(this.$refs.tabList, to, from)
+    },
     tabList() {
       this.$nextTick(() => {
         this.initTabLine()
@@ -111,12 +118,6 @@ export default {
     selectTab(index) {
       if (index !== this.tabIndex) {
         this.tabIndex = index
-        // 设置滚动位置
-        const { tabItemText, tabList } = this.$refs
-        const to = tabItemText[index].offsetLeft - (tabList.offsetWidth - tabItemText[index].offsetWidth) / 2
-        const from = tabList.scrollLeft
-        setScrollLeft(this.$refs.tabList, to, from)
-
         this.$emit('change', index)
         this.switchRoute()
       }

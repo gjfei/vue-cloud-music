@@ -1,7 +1,9 @@
 <template>
   <transition>
-    <div class="popup">
-
+    <div class="popup" v-show="value" @click="close">
+      <div class="popup-bottom round" @click.stop="()=>{}">
+        <slot />
+      </div>
     </div>
   </transition>
 </template>
@@ -13,11 +15,19 @@ export default {
 
     }
   },
+  props: {
+    value: {
+      type: Boolean,
+      default: true
+    }
+  },
   components: {
 
   },
   methods: {
-
+    close(){
+      this.$emit('input',false)
+    }
   }
 }
 </script>
@@ -28,7 +38,32 @@ export default {
   top: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0,0,0,.3);
-  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 200;
+  &-bottom {
+    width: 100%;
+    background-color: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    min-height: 30vh;
+    max-height: 60vh;
+    &.round {
+      border-radius: 30px 30px 0 0;
+    }
+  }
+  &-left {
+    height: 100vh;
+    min-width: 30vw;
+    max-width: 90vw;
+    position: absolute;
+    background-color: #fff;
+    left: 0;
+    top: 0;
+
+    &.round {
+      border-radius: 0 30px 30px 0;
+    }
+  }
 }
 </style>

@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view />
+    <keep-alive>
+      <router-view v-if="!$route.meta.noCache" />
+    </keep-alive>
+    <router-view v-if="$route.meta.noCache" />
     <music-player />
   </div>
 </template>

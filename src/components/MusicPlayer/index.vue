@@ -4,9 +4,16 @@
       <full-screen-player
         v-if="playerInfo.fullScreen"
         @setProgress='setProgress'
+        @openSongList='openSongList'
       />
-      <mini-player v-else />
+      <mini-player
+        v-else
+        @openSongList='openSongList'
+      />
     </div>
+    <popup v-model="popupStatus">
+      
+    </popup>
     <audio
       :src="audioSrc"
       ref="audioRef"
@@ -26,6 +33,7 @@ import { getRandomInt } from '@/utils'
 import lyricParser from './utils/lyricParser'
 import { mapState, mapMutations } from 'vuex'
 import { getRequestSongUrl, getRequestLyric } from '@/api/songPlayer'
+import Popup from '@/components/Popup'
 export default {
   data() {
     return {
@@ -33,10 +41,12 @@ export default {
       audioSrc: '',
       duration: 0,
       currentTime: 0,
-      status: true
+      status: true,
+      popupStatus: false
     }
   },
   components: {
+    Popup,
     MiniPlayer,
     FullScreenPlayer
   },
@@ -123,6 +133,10 @@ export default {
       // if (this.playerInfo.songId) {
       //   alert('播放失败')
       // }
+    },
+    // 打开歌曲列表
+    openSongList() {
+      this.popupStatus = true
     }
   }
 }

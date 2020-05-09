@@ -74,7 +74,10 @@
           />
         </div>
         <div class="icon-right flex-align-center">
-          <svg-icon icon-class='song-list' />
+          <svg-icon
+            icon-class='song-list'
+            @click.native="openSongList"
+          />
         </div>
       </div>
     </div>
@@ -151,6 +154,9 @@ export default {
         }
       }
       this.setSongIndex(index)
+    },
+    openSongList() {
+      this.$emit('openSongList')
     }
   }
 }

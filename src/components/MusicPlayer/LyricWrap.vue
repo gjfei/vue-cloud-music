@@ -210,7 +210,6 @@ export default {
   background-color: $red;
   position: absolute;
   top: 50%;
-  /* transform: translateY(-50%); */
   margin-top: -1px;
 }
 </style>

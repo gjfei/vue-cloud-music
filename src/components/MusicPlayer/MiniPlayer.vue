@@ -30,7 +30,7 @@
       <svg-icon
         icon-class='song-list'
         class="song-list-btn"
-        @click.stop="toggleSongList"
+        @click.native.stop="openSongList"
       />
     </div>
     <div class="placeholder"></div>
@@ -58,8 +58,8 @@ export default {
   },
   methods: {
     ...mapMutations(['setPlayerStatus', 'setFullScreen']),
-    toggleSongList() {
-      console.log('歌曲列表')
+    openSongList() {
+      this.$emit('openSongList')
     },
     play() {
       this.setPlayerStatus(!this.playerInfo.playerStatus)
@@ -69,12 +69,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 @keyframes rotate {
-  0%{
+  0% {
     transform: rotate(0);
   }
-  100%{
+  100% {
     transform: rotate(360deg);
   }
 }

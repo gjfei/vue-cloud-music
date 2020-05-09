@@ -4,6 +4,8 @@ import AppMain from '@/layouts/AppMain'
 import InsidePage from '@/layouts/InsidePage'
 Vue.use(VueRouter)
 
+// noCache: true  如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
+
 const routes = [
   {
     path: '/',
@@ -14,7 +16,7 @@ const routes = [
         name: 'Recommend',
         component: () => import('@/views/appMain/recommend'),
         meta: {
-          title: '推荐'
+          title: '推荐',
         }
       },
       {
@@ -51,7 +53,8 @@ const routes = [
         name: 'PlayListPage',
         component: () => import('@/views/playList/index.vue'),
         meta: {
-          title: '歌单广场'
+          title: '歌单广场',
+          noCache: true
         }
       }
     ]
@@ -60,7 +63,8 @@ const routes = [
     name: 'PlayListDetail',
     component: () => import('@/views/playList/detail.vue'),
     meta: {
-      title: '歌单'
+      title: '歌单',
+      noCache: true
     }
   }
 ]

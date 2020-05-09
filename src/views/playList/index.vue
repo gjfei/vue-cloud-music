@@ -39,7 +39,8 @@ export default {
       tabIndex: 0,
       swiperOptions: {
         observer: true,
-        observeSlideChildren: true
+        observeSlideChildren: true,
+        passiveListeners:false,
       },
       swiperList: [],
       swiperIndex: 0

@@ -12,7 +12,7 @@
       />
     </div>
     <popup v-model="popupStatus">
-      
+      播放中的列表正在制作当中
     </popup>
     <audio
       :src="audioSrc"

@@ -23,9 +23,16 @@
 
     </div>
     <div
-      class="indicator-line"
-      v-show="showIndicator"
-    ></div>
+      class="indicator-line flex-align-center"
+      v-if="showIndicator"
+    >
+      <div
+        class="triangle"
+        @click="setPlayTime"
+      ></div>
+      <div class="line"></div>
+      <div class="time">{{lyricList[scrollIndex].time | formatSeconds}}</div>
+    </div>
   </div>
 </template>
 
@@ -46,6 +53,13 @@ export default {
       timeId: null,
       scrollStatus: false,
       timeIndexChange: 0,
+    }
+  },
+  filters: {
+    formatSeconds(duration) {
+      const m = Math.floor(duration / 60) < 10 ? '0' + Math.floor(duration / 60) : Math.floor(duration / 60)
+      const s = Math.floor(duration % 60) < 10 ? '0' + Math.floor(duration % 60) : Math.floor(duration % 60)
+      return `${m}:${s}`
     }
   },
   computed: {
@@ -131,29 +145,6 @@ export default {
     })
   },
   methods: {
-    getLyric() {
-      getRequestLyric(this.playerInfo.songId).then(res => {
-        let lyricList = []
-
-        if (res.lrc && res.lrc.lyric) {
-          lyricList = lyricParser(res.lrc.lyric)
-        } else {
-          lyricList = [{
-            time: 0,
-            text: '纯音乐，请欣赏'
-          }]
-        }
-        this.lyricList = lyricList
-        this.$nextTick(() => {
-          const lyricTextHeight = []
-          this.$refs.lyricText.forEach(item => {
-            lyricTextHeight.push(item.offsetHeight)
-          })
-          this.lyricTextHeight = lyricTextHeight
-          this.lyricHeight = this.lyricWrapRef.offsetHeight
-        })
-      })
-    },
     onScroll() {
       // touchmove触发的滚动
       if (this.scrollStatus) {
@@ -171,6 +162,10 @@ export default {
     },
     onTouchmove() {
       this.scrollStatus = true
+    },
+    setPlayTime() {
+      const { lyricList, scrollIndex } = this
+      this.$emit('setPlayTime', lyricList[scrollIndex].time)
     }
   }
 }
@@ -195,10 +190,10 @@ export default {
       line-height: 60px;
       font-size: $font-base;
       &.active1 {
-        color: $red;
+        color: $font-color-pale;
       }
       &.active2 {
-        color: blue;
+        color: #e5e5e5;
       }
     }
   }
@@ -206,10 +201,26 @@ export default {
 
 .indicator-line {
   width: 100%;
-  height: 2px;
-  background-color: $red;
   position: absolute;
   top: 50%;
-  margin-top: -1px;
+  transform: translateY(-50%);
+  .triangle {
+    width: 0px;
+    height: 0px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid $font-color-pale;
+    margin-right: 20px;
+  }
+  .line {
+    flex: 1;
+    height: 2px;
+    background-color: $font-color-pale;
+  }
+  .time {
+    font-size: $font-sm;
+    color: $font-color-pale;
+    margin-left: 20px;
+  }
 }
 </style>

@@ -1,7 +1,14 @@
 <template>
   <transition>
-    <div class="popup" v-show="value" @click="close">
-      <div class="popup-bottom round" @click.stop="()=>{}">
+    <div
+      class="popup"
+      v-show="value"
+      @click="close"
+    >
+      <div
+        class="popup-bottom round"
+        @click.stop="()=>{}"
+      >
         <slot />
       </div>
     </div>
@@ -21,12 +28,22 @@ export default {
       default: true
     }
   },
+  watch: {
+    // 防止滚动穿透
+    value(val) {
+      if (val) {
+        document.body.classList.add('overflow-hidden');
+      } else {
+        document.body.classList.remove('overflow-hidden');
+      }
+    }
+  },
   components: {
 
   },
   methods: {
-    close(){
-      this.$emit('input',false)
+    close() {
+      this.$emit('input', false)
     }
   }
 }

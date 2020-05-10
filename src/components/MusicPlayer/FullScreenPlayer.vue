@@ -30,7 +30,7 @@
       </div>
     </nav-bar>
     <div class="container">
-      <lyric-wrap />
+      <lyric-wrap @setPlayTime='setPlayTime' />
       <div class="song-cover">
 
       </div>
@@ -125,8 +125,12 @@ export default {
   },
   methods: {
     ...mapMutations(['setPlayerStatus', 'setFullScreen', 'setPlayerMode', 'setSongIndex']),
-    setProgress(e) {
-      this.$emit('setProgress', e)
+    setProgress(val) {
+      this.$emit('setProgress', val)
+    },
+    setPlayTime(val) {
+      const reslut = val / this.playerInfo.duration * 100
+      this.$emit('setProgress', reslut)
     },
     play() {
       this.setPlayerStatus(!this.playerInfo.playerStatus)

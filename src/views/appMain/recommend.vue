@@ -85,7 +85,7 @@ export default {
       }, {
         name: '排行',
         iconClass: 'rank',
-        path: '/'
+        path: '/rank'
       }, {
         name: '歌手',
         iconClass: 'microphone',

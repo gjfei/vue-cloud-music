@@ -56,6 +56,15 @@ const routes = [
           title: '歌单广场',
           noCache: true
         }
+      },
+      {
+        path: '/rank',
+        name: 'RankPage',
+        component: () => import('@/views/rank/index.vue'),
+        meta: {
+          title: '排行榜',
+          noCache: true
+        }
       }
     ]
   }, {

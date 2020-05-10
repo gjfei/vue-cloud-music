@@ -12,7 +12,21 @@
       />
     </div>
     <popup v-model="popupStatus">
-      播放中的列表正在制作当中测试
+      <div class='title'>
+        当前播放列表
+      </div>
+      <div class="song-list">
+        <song-card
+          v-for="(item,index) in playerInfo.songList"
+          :key="item.id"
+          :name='item.name'
+          :singer='item.ar[0].name'
+          :disabled='item.dis'
+          :active='item.id===playerInfo.songId'
+          @onClick="playMusic(index)"
+          @close="closeMusic(index)"
+        />
+      </div>
     </popup>
     <audio
       :src="audioSrc"
@@ -29,6 +43,7 @@
 <script>
 import MiniPlayer from './MiniPlayer'
 import FullScreenPlayer from './FullScreenPlayer'
+import SongCard from './SongCard'
 import { getRandomInt } from '@/utils'
 import lyricParser from './utils/lyricParser'
 import { mapState, mapMutations } from 'vuex'
@@ -47,6 +62,7 @@ export default {
   },
   components: {
     Popup,
+    SongCard,
     MiniPlayer,
     FullScreenPlayer
   },
@@ -76,7 +92,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSongDuration', 'setSongCurrentTime', 'setPlayerStatus', 'setSongIndex', 'setSongLyricList']),
+    ...mapMutations(['setSongDuration', 'setSongCurrentTime', 'setPlayerStatus', 'setSongIndex', 'setSongLyricList','setSongList']),
 
     getSongUrl() {
       this.audioSrc = getRequestSongUrl(this.playerInfo.songId)
@@ -130,58 +146,45 @@ export default {
       this.setSongIndex(index)
     },
     playErro(e) {
-      // if (this.playerInfo.songId) {
-      //   alert('播放失败')
-      // }
+      if (this.playerInfo.songId) {
+        alert('播放失败')
+      }
     },
     // 打开歌曲列表
     openSongList() {
       this.popupStatus = true
+    },
+    playMusic(index) {
+      this.setSongIndex(index)
+      // 延迟播放
+      this.$nextTick(() => {
+        this.setPlayerStatus(true)
+      })
+    },
+    // 删除歌曲列表
+    closeMusic(index){
+      const {songList} = this.playerInfo
+      songList.splice(index,1)
+      this.setSongList(songList)
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.min-player {
-  position: fixed;
-  z-index: 99;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100vw;
-  height: 88px;
-  background-color: #fff;
-  padding: 0 10px;
+::v-deep .popup-bottom {
+  padding: 20px;
   box-sizing: border-box;
-  .music-cover {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: red;
-  }
-  .music-info {
-    flex: 1;
-    overflow: hidden;
-    padding: 0 10px;
-    box-sizing: border-box;
-    .music-name {
-      font-size: $font-base;
-      color: #000;
-      @include text-ellipsis(1);
-    }
-    .music-singer {
-      font-size: $font-base;
-      color: $font-color-light;
-      @include text-ellipsis(1);
-    }
-  }
-  .player-btn {
-    width: 60px;
-    height: 60px;
-  }
+  display: flex;
+  flex-direction: column;
 }
-.placeholder {
-  height: 88px;
+.title {
+  flex-shrink: 0;
+  font-size: 36px;
+  color: $font-color-dark;
+}
+.song-list {
+  flex: 1;
+  overflow-y: auto;
 }
 </style>

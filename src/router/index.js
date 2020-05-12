@@ -28,9 +28,9 @@ const routes = [
         }
       },
       {
-        path: '/clould-village',
-        name: 'ClouldVillage',
-        component: () => import('@/views/appMain/clould-village'),
+        path: '/cloud-village',
+        name: 'CloudVillage',
+        component: () => import('@/views/appMain/cloud-village'),
         meta: {
           title: '云村'
         }
@@ -51,7 +51,7 @@ const routes = [
       {
         path: '/play-list',
         name: 'PlayListPage',
-        component: () => import('@/views/playList/index.vue'),
+        component: () => import('@/views/play-list'),
         meta: {
           title: '歌单广场',
           noCache: true
@@ -60,9 +60,17 @@ const routes = [
       {
         path: '/rank',
         name: 'RankPage',
-        component: () => import('@/views/rank/index.vue'),
+        component: () => import('@/views/rank'),
         meta: {
           title: '排行榜',
+          noCache: true
+        }
+      },{
+        path: '/singer-list',
+        name: 'SingerListPage',
+        component: () => import('@/views/singer-list'),
+        meta: {
+          title: '歌手',
           noCache: true
         }
       }
@@ -70,7 +78,7 @@ const routes = [
   }, {
     path: '/play-list-detail/:id',
     name: 'PlayListDetail',
-    component: () => import('@/views/playList/detail.vue'),
+    component: () => import('@/views/play-list/detail.vue'),
     meta: {
       title: '歌单',
       noCache: true
@@ -83,6 +91,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  console.log(to);
   if (to.meta.title) {
     document.title = to.meta.title
   }

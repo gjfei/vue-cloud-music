@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-bar title="1">
+    <nav-bar>
       <svg-icon
         slot="left"
         icon-class='menu'
@@ -9,7 +9,7 @@
       <tabs-list
         slot="title"
         :tab-list='tabList'
-        :showLine='false'
+        :show-line='false'
         :activeStyle='activeStyle'
         routeModel
         tab-key='title'
@@ -31,7 +31,7 @@ export default {
   name: 'AppMain',
   data() {
     return {
-      tabList: [{ title: '推荐', path: '/' }, { title: '发现', path: '/discover' }, { title: '云村', path: '/clould-village' }, { title: '视频', path: '/video' }],
+      tabList: [{ title: '推荐', path: '/' }, { title: '发现', path: '/discover' }, { title: '云村', path: '/cloud-village' }, { title: '视频', path: '/video' }],
       activeStyle: {
         color: '#333',
         fontSize: '20px',

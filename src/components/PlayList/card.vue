@@ -9,10 +9,11 @@
         @load='onLoad'
         @error='loadError'
       >
-      <div class="play-count">
+      <div class="play-count" v-if='playCount'>
         <svg-icon icon-class='stop' />
         {{Math.floor(playCount/10000)}}万
       </div>
+      <div class="tips">{{tips}}</div>
       <div
         class="placeholder flex-center"
         v-if="loading&&!error"
@@ -31,7 +32,7 @@
         />
       </div>
     </div>
-    <div class="name">
+    <div class="name" v-if='name'>
       {{name}}
     </div>
   </div>
@@ -48,16 +49,16 @@ export default {
   },
   props: {
     imgUrl: {
-      type: String,
-      required: true
+      type: String
     },
     name: {
-      type: String,
-      required: true
+      type: String
     },
     playCount: {
-      type: Number,
-      required: true
+      type: Number
+    },
+    tips:{
+      type:String
     }
   },
   methods: {
@@ -84,7 +85,7 @@ export default {
 }
 .card {
   width: 224px;
-  height: 300px;
+  /* height: 300px; */
 }
 .img-wrapper {
   width: 224px;
@@ -101,6 +102,17 @@ export default {
   color: $font-color-pale;
   font-size: $font-base;
   top: 0;
+  left: 0;
+}
+.tips {
+  position: absolute;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 1;
+  color: $font-color-pale;
+  font-size: $font-base;
+  bottom: 0;
   left: 0;
 }
 .placeholder {
@@ -132,6 +144,7 @@ export default {
 }
 .name {
   padding-top: 15px;
+  padding-bottom: 20px;
   box-sizing: border-box;
   font-size: $font-sm;
   color: $font-color-dark;

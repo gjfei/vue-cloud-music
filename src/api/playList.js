@@ -10,8 +10,12 @@ export const getRequestPlayList = (cat='',offset=0) => {
   return request.get(`/top/playlist?cat=${cat}&offset=${offset}&limit=30`)
 }
 
-// 歌单详情
+// 排行榜单
+export const getRequestRankList = () => {
+  return request.get('/toplist/detail')
+}
 
+// 歌单详情
 export const getRequestPlayListDetail = (id) => {
   return request.get(`/playlist/detail?id=${id}`)
 

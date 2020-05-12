@@ -147,7 +147,8 @@ export default {
     },
     playErro(e) {
       if (this.playerInfo.songId) {
-        alert('播放失败')
+        alert('该歌曲无法播放')
+        this.setPlayerStatus(false)
       }
     },
     // 打开歌曲列表

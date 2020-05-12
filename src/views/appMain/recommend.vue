@@ -89,7 +89,7 @@ export default {
       }, {
         name: '歌手',
         iconClass: 'microphone',
-        path: '/'
+        path: '/singer-list'
       }, {
         name: '电台',
         iconClass: 'station',

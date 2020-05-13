@@ -15,6 +15,7 @@
     "fastclick": "^1.0.6",
     "grade-js": "^1.0.10",
     "normalize.css": "^8.0.1",
+    "qs": "^6.9.4",
     "swiper": "^5.3.6",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.0",

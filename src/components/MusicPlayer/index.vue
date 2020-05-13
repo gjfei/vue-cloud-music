@@ -92,14 +92,17 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSongDuration', 'setSongCurrentTime', 'setPlayerStatus', 'setSongIndex', 'setSongLyricList','setSongList']),
+    ...mapMutations(['setSongDuration', 'setSongCurrentTime', 'setPlayerStatus', 'setSongIndex', 'setSongLyricList', 'setSongList']),
 
     getSongUrl() {
       this.audioSrc = getRequestSongUrl(this.playerInfo.songId)
     },
     // 获取歌词
     getLyric() {
-      getRequestLyric(this.playerInfo.songId).then(res => {
+      const param = {
+        id: this.playerInfo.songId
+      }
+      getRequestLyric(param).then(res => {
         let lyricList = []
         if (res.lrc && res.lrc.lyric) {
           lyricList = lyricParser(res.lrc.lyric)
@@ -163,9 +166,9 @@ export default {
       })
     },
     // 删除歌曲列表
-    closeMusic(index){
-      const {songList} = this.playerInfo
-      songList.splice(index,1)
+    closeMusic(index) {
+      const { songList } = this.playerInfo
+      songList.splice(index, 1)
       this.setSongList(songList)
     }
   }

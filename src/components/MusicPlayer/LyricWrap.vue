@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { getRequestLyric } from '@/api/songPlayer'
 import { setScrollTop } from '@/utils'
 import { mapState, mapMutations } from 'vuex'
 

@@ -1,71 +1,170 @@
 import request from './request'
 
-// 歌手分类
-export const getSingerClassify = ()=>{
-  return [
+/**
+ * 歌手分类
+ */
+export const getSingerClassify = () => {
+  const type = [
     {
-      name: "华语男",
-      cat: "1001"
+      name: '全部',
+      key: -1
     },
     {
-      name: "华语女",
-      cat: "1002"
+      name: '男歌手',
+      key: 1
     },
     {
-      name: "华语组合",
-      cat: "1003"
+      name: '女歌手',
+      key: 2
     },
     {
-      name: "欧美男",
-      cat: "2001"
-    },
-    {
-      name: "欧美女",
-      cat: "2002"
-    },
-    {
-      name: "欧美组合",
-      cat: "2003"
-    },
-    {
-      name: "日本男",
-      cat: "6001"
-    },
-    {
-      name: "日本女",
-      cat: "6002"
-    },
-    {
-      name: "日本组合",
-      cat: "6003"
-    },
-    {
-      name: "韩国男",
-      cat: "7001"
-    },
-    {
-      name: "韩国女",
-      cat: "7002"
-    },
-    {
-      name: "韩国组合",
-      cat: "7003"
-    },
-    {
-      name: "其他男歌手",
-      cat: "4001"
-    },
-    {
-      name: "其他女歌手",
-      cat: "4002"
-    },
-    {
-      name: "其他组合",
-      cat: "4003"
+      name: '乐队',
+      key: 3
     }
   ]
+  const area = [
+    {
+      name: '全部',
+      key: -1
+    },
+    {
+      name: '华语',
+      key: 7
+    },
+    {
+      name: '欧美',
+      key: 96
+    },
+    {
+      name: '日本',
+      key: 8
+    },
+    {
+      name: '韩国',
+      key: 16
+    },
+    {
+      name: '其他',
+      key: 0
+    }]
+  const initial = [
+    {
+      name: 'A',
+      key: 'A'
+    },
+    {
+      name: 'B',
+      key: 'B'
+    },
+    {
+      name: 'C',
+      key: 'C'
+    },
+    {
+      name: 'D',
+      key: 'D'
+    },
+    {
+      name: 'E',
+      key: 'E'
+    },
+    {
+      name: 'F',
+      key: 'F'
+    },
+    {
+      name: 'G',
+      key: 'G'
+    },
+    {
+      name: 'H',
+      key: 'H'
+    },
+    {
+      name: 'I',
+      key: 'I'
+    },
+    {
+      name: 'J',
+      key: 'J'
+    },
+    {
+      name: 'K',
+      key: 'K'
+    },
+    {
+      name: 'L',
+      key: 'L'
+    },
+    {
+      name: 'M',
+      key: 'M'
+    },
+    {
+      name: 'N',
+      key: 'N'
+    },
+    {
+      name: 'O',
+      key: 'O'
+    },
+    {
+      name: 'P',
+      key: 'P'
+    },
+    {
+      name: 'Q',
+      key: 'Q'
+    },
+    {
+      name: 'R',
+      key: 'R'
+    },
+    {
+      name: 'S',
+      key: 'S'
+    },
+    {
+      name: 'T',
+      key: 'T'
+    },
+    {
+      name: 'U',
+      key: 'U'
+    },
+    {
+      name: 'V',
+      key: 'V'
+    },
+    {
+      name: 'W',
+      key: 'W'
+    },
+    {
+      name: 'X',
+      key: 'X'
+    },
+    {
+      name: 'Y',
+      key: 'Y'
+    },
+    {
+      name: 'Z',
+      key: 'Z'
+    }
+  ]
+  return [{title:'首字母',list:initial}, {title:'类型',list:type},{title:'地区',list:area}]
 }
-// 歌手列表
-export const getRequestArtistList = (cat,offset=0,initial='') => {
-  return request.get(`/artist/list?cat=${cat}&offset=${offset}&limit=50&initial=${initial}`)
+/**
+ * 歌手列表
+ * 
+ * @param {Object} params 
+ * @param {string} [params.initial] A-Z首字母
+ * @param {string} [params.type] cat分类，getSingerClassify()里的值
+ * @param {string} [params.area] cat分类，getSingerClassify()里的值
+ * @param {number} [params.limit] 取出评论数量，默认为50
+ * @param {string} [params.offset] 分解数量，用于分页，如:(评论页数-1）* 50，其中50为limit的值
+ */
+export const getRequestArtistList = params => {
+  return request.get('/artist/list', { params })
 }

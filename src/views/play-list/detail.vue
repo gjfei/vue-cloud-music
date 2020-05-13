@@ -175,7 +175,7 @@ export default {
   methods: {
     ...mapMutations(['setSongList', 'setSongIndex', 'setPlayerStatus']),
     getPlayListDetail() {
-      getRequestPlayListDetail(this.$route.params.id).then(res => {
+      getRequestPlayListDetail(this.$route.params).then(res => {
         this.$set(this.menuList[0], 'tips', res.playlist.commentCount)
         this.$set(this.menuList[1], 'tips', res.playlist.shareCount)
         // 判断不能播放的歌曲

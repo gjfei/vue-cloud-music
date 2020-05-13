@@ -14,13 +14,14 @@
     />
     <div
       class="loading flex-center"
-      v-if="isUpScrolling"
+      v-if="endloading || isUpScrolling"
     >
       <svg-icon
         icon-class='loading'
         fill='#999'
+        v-if="!endloading"
       />
-      <div class="loading-text">加载中~</div>
+      <div class="loading-text"> {{endloading?'到底啦~':'加载中~'}}</div>
     </div>
   </div>
 </template>
@@ -32,9 +33,10 @@ export default {
   data() {
     return {
       playList: [],
-      isUpScrolling: true,
-      isLoading: false,
-      offsetCount: 0
+      isUpScrolling: true, // 加载中
+      isLoading: false, // 加载中
+      endloading: false, // 列表加载完毕
+      offset: 0
     }
   },
   props: {
@@ -62,13 +64,22 @@ export default {
   },
   methods: {
     getPlayList() {
-      if (this.isUpScrolling && !this.isLoading) {
+      const { isUpScrolling, isLoading, endloading, cat, offset } = this
+      if (isUpScrolling && !isLoading && !endloading) {
         this.isLoading = true
-        getRequestPlayList(this.cat, this.offsetCount).then(res => {
-          this.offsetCount += 30
+        const param = {
+          cat,
+          offset,
+          limit: 30
+        }
+        getRequestPlayList(param).then(res => {
+          this.offset += 30
           this.playList = [...this.playList, ...res.playlists]
           this.isUpScrolling = false
           this.isLoading = false
+          if (this.playList.length === res.total) {
+            this.endloading = true
+          }
         })
       }
     },

@@ -4,23 +4,21 @@ import AppMain from '@/layouts/AppMain'
 import InsidePage from '@/layouts/InsidePage'
 Vue.use(VueRouter)
 
-// noCache: true  如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
-
 const routes = [
   {
     path: '/',
     component: AppMain,
     children: [
       {
-        path: '/',
-        name: 'Recommend',
-        component: () => import('@/views/appMain/recommend'),
+        path: '/home',
+        name: 'Home',
+        component: () => import('@/views/appMain/home'),
         meta: {
           title: '推荐',
         }
       },
       {
-        path: '/discover',
+        path: '/',
         name: 'Discover',
         component: () => import('@/views/appMain/discover'),
         meta: {
@@ -53,8 +51,7 @@ const routes = [
         name: 'PlayListPage',
         component: () => import('@/views/play-list'),
         meta: {
-          title: '歌单广场',
-          noCache: true
+          title: '歌单广场'
         }
       },
       {
@@ -62,16 +59,14 @@ const routes = [
         name: 'RankPage',
         component: () => import('@/views/rank'),
         meta: {
-          title: '排行榜',
-          noCache: true
+          title: '排行榜'
         }
-      },{
-        path: '/singer-list',
-        name: 'SingerListPage',
-        component: () => import('@/views/singer-list'),
+      }, {
+        path: '/singer',
+        name: 'Singer',
+        component: () => import('@/views/singer'),
         meta: {
-          title: '歌手',
-          noCache: true
+          title: '歌手'
         }
       }
     ]
@@ -81,7 +76,30 @@ const routes = [
     component: () => import('@/views/play-list/detail.vue'),
     meta: {
       title: '歌单',
-      noCache: true
+      type: 'playList'
+    }
+  }, {
+    path: '/singer-detail/:id',
+    name: 'SingerDetail',
+    component: () => import('@/views/play-list/detail.vue'),
+    meta: {
+      title: '歌手',
+      type: 'singer'
+    }
+  }, {
+    path: '/albums-detail/:id',
+    name: 'AlbumsDetail',
+    component: () => import('@/views/play-list/detail.vue'),
+    meta: {
+      title: '专辑',
+      type: 'albums'
+    }
+  }, {
+    path: '/search',
+    name: 'Search',
+    component: () => import('@/views/search'),
+    meta: {
+      title: '搜索'
     }
   }
 ]

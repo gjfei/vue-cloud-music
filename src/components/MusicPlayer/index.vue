@@ -11,7 +11,10 @@
         @openSongList='openSongList'
       />
     </div>
-    <popup v-model="popupStatus">
+    <popup
+      v-model="popupStatus"
+      round
+    >
       <div class='title'>
         当前播放列表
       </div>
@@ -190,5 +193,6 @@ export default {
 .song-list {
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 </style>

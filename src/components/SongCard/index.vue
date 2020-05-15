@@ -3,7 +3,10 @@
     class="song-item flex-align-center"
     :class="{disabled:disabled}"
   >
-    <div class="left flex-align-center">
+    <div
+      class="left flex-align-center"
+      v-if='index'
+    >
       <div class="index">
         {{index}}
       </div>

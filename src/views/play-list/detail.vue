@@ -47,7 +47,10 @@
               height='100%'
               :src="detail.coverImgUrl+'?param=240y240'"
             >
-            <div class="play-count">
+            <div
+              class="play-count"
+              v-if='detail.playCount'
+            >
               <svg-icon icon-class='stop' />
               {{Math.floor(detail.playCount/10000)}}万
             </div>
@@ -59,15 +62,19 @@
             <div class="author flex-align-center">
               <img
                 class="avatar"
-                :src="detail.creator.avatarUrl"
+                v-if='detail.avatarUrl'
+                :src="detail.avatarUrl"
                 alt="avatar"
               >
               <div class="nickname">
-                {{detail.creator.nickname}}
+                {{detail.nickname}}
               </div>
             </div>
-            <div class="signature">
-              {{detail.creator.signature}}
+            <div
+              class="signature"
+              v-if='detail.signature'
+            >
+              {{detail.signature}}
             </div>
           </div>
         </div>
@@ -100,18 +107,18 @@
               iconClass='stop-border'
               class="icon"
             />
-            <div class="title">播放全部<span>(共{{detail.tracks.length}}首)</span></div>
+            <div class="title">播放全部<span>(共{{songList.length}}首)</span></div>
           </div>
           <div class="collect">
             <svg-icon
               iconClass='add'
               fill='#fff'
             />
-            收藏({{detail.subscribedCount}})
+            收藏{{detail.subscribedCount?`(${detail.subscribedCount})`:''}}
           </div>
         </div>
         <song-card
-          v-for="(item,index) in detail.tracks"
+          v-for="(item,index) in songList"
           :key="item.id"
           :index='index+1'
           :name='item.name'
@@ -128,7 +135,8 @@
 <script>
 import NoticeBar from '@/components/NoticeBar'
 import SongCard from '@/components/SongCard'
-import { getRequestPlayListDetail } from '@/api/playList'
+import { getRequestPlayListDetail, getRequestAlbumDetail } from '@/api/playList'
+import { getRequestArtistDetail } from '@/api/singerList'
 import { mapMutations } from 'vuex'
 // import Grade from 'grade-js'
 export default {
@@ -150,6 +158,7 @@ export default {
         tips: '多选'
       }],
       detail: null,
+      songList: [],
       songListTop: 275,
       navOpacity: 0
     }
@@ -160,11 +169,18 @@ export default {
   },
   computed: {
     navTitle() {
-      return this.navOpacity >= 1 ? this.detail.name : '歌单'
+      return this.navOpacity >= 1 ? this.detail.name : this.$route.meta.title
     }
   },
   created() {
-    this.getPlayListDetail()
+    const { type } = this.$route.meta
+    if (type === 'playList') {
+      this.getPlayListDetail()
+    } else if (type === 'singer') {
+      this.getArtistDetail()
+    } else if (type === 'albums') {
+      this.getAlbumDetail()
+    }
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll)
@@ -174,6 +190,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setSongList', 'setSongIndex', 'setPlayerStatus']),
+    // 歌单
     getPlayListDetail() {
       getRequestPlayListDetail(this.$route.params).then(res => {
         this.$set(this.menuList[0], 'tips', res.playlist.commentCount)
@@ -187,8 +204,72 @@ export default {
           } else {
             item.dis = false
           }
-        });
-        this.detail = res.playlist
+        })
+        this.detail = {
+          coverImgUrl: res.playlist.coverImgUrl,
+          name: res.playlist.name,
+          avatarUrl: res.playlist.creator.avatarUrl,
+          nickname: res.playlist.creator.nickname,
+          signature: res.playlist.creator.signature,
+          subscribedCount: res.playlist.subscribedCount
+        }
+        this.songList = res.playlist.tracks
+        this.$nextTick(() => {
+          this.songListTop = this.$refs.songListRef.getBoundingClientRect().top
+        })
+      })
+    },
+    // 歌手
+    getArtistDetail() {
+      getRequestArtistDetail(this.$route.params).then(res => {
+        this.$set(this.menuList[0], 'tips', res.artist.musicSize)
+        this.$set(this.menuList[0], 'iconName', 'musical-note')
+        this.$set(this.menuList[1], 'tips', res.artist.albumSize)
+        this.$set(this.menuList[1], 'iconName', 'play-list')
+        // 判断不能播放的歌曲
+        const fee = [1, 4, 16]
+        const st = [-1, -200]
+        res.hotSongs.forEach(item => {
+          if (fee.indexOf(item.fee) != -1 || st.indexOf(item.st) != -1) {
+            item.dis = true
+          } else {
+            item.dis = false
+          }
+        })
+        this.detail = {
+          coverImgUrl: res.artist.picUrl,
+          name: res.artist.name,
+          nickname: res.artist.briefDesc
+        }
+        this.songList = res.hotSongs
+        this.$nextTick(() => {
+          this.songListTop = this.$refs.songListRef.getBoundingClientRect().top
+        })
+      })
+    },
+    // 专辑
+    getAlbumDetail() {
+      getRequestAlbumDetail(this.$route.params).then(res => {
+        this.$set(this.menuList[0], 'tips', res.album.info.commentCount)
+        this.$set(this.menuList[1], 'tips', res.album.info.shareCount)
+        // 判断不能播放的歌曲
+        const fee = [1, 4, 16]
+        const st = [-1, -200]
+        res.songs.forEach(item => {
+          if (fee.indexOf(item.fee) != -1 || st.indexOf(item.st) != -1) {
+            item.dis = true
+          } else {
+            item.dis = false
+          }
+        })
+        this.detail = {
+          coverImgUrl: res.album.picUrl,
+          name: res.album.name,
+          avatarUrl: res.album.artist.picUrl,
+          nickname: res.album.artist.name,
+          signature: res.album.description
+        }
+        this.songList = res.songs
         this.$nextTick(() => {
           this.songListTop = this.$refs.songListRef.getBoundingClientRect().top
         })
@@ -196,7 +277,7 @@ export default {
     },
     handleScroll() {
       //获取滚动时的高度
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      let scrollTop = document.documentElement.scrollTop
       if (scrollTop > this.songListTop * 0.5) {
         this.navOpacity = (2 * scrollTop - this.songListTop) / this.songListTop
       } else {
@@ -204,7 +285,7 @@ export default {
       }
     },
     playMusic(index = 0) {
-      this.setSongList(this.detail.tracks)
+      this.setSongList(this.songList)
       this.setSongIndex(index)
       // 延迟播放
       this.$nextTick(() => {
@@ -286,11 +367,12 @@ export default {
           width: 48px;
           height: 48px;
           border-radius: 50%;
+          margin-right: 20px;
         }
         .nickname {
           font-size: $font-base;
           color: $font-color-light;
-          margin-left: 20px;
+          @include text-ellipsis(5);
         }
       }
       .signature {
@@ -339,12 +421,14 @@ export default {
       }
     }
     .collect {
+      min-width: 110px;
       height: 68px;
       border-radius: 34px;
       background-color: $red;
       color: $font-color-pale;
-      font-size: $font-sm;
+      font-size: $font-base;
       line-height: 68px;
+      text-align: center;
       padding: 0 20px;
     }
   }

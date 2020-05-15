@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-bar>
+    <nav-bar @clickRight='clickRight'>
       <svg-icon
         slot="left"
         icon-class='menu'
@@ -31,12 +31,19 @@ export default {
   name: 'AppMain',
   data() {
     return {
-      tabList: [{ title: '推荐', path: '/' }, { title: '发现', path: '/discover' }, { title: '云村', path: '/cloud-village' }, { title: '视频', path: '/video' }],
+      tabList: [{ title: '我的', path: '/home' }, { title: '发现', path: '/' }, { title: '云村', path: '/cloud-village' }, { title: '视频', path: '/video' }],
       activeStyle: {
         color: '#333',
         fontSize: '20px',
         fontWeight: 'bold'
       },
+    }
+  },
+  methods: {
+    clickRight() {
+      this.$router.push({
+        path: '/search'
+      })
     }
   }
 }

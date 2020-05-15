@@ -18,6 +18,7 @@
     >
       <svg-icon
         icon-class='loading'
+        class="icon"
         fill='#999'
         v-if="!endloading"
       />
@@ -105,6 +106,7 @@ export default {
   padding: 0 15px;
   box-sizing: border-box;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   height: 100%;
   ::v-deep .card {
     margin: 8px;
@@ -114,8 +116,12 @@ export default {
   height: 60px;
   width: 100%;
   text-align: center;
+  .icon {
+     margin-right: 20px;
+  }
   .loading-text {
-    margin-left: 20px;
+    font-size: $font-sm;
+    color: $font-color-dark;
   }
 }
 </style>

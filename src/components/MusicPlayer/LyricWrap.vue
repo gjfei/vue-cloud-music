@@ -179,6 +179,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   position: relative;
   .lyric-list {
     box-sizing: border-box;

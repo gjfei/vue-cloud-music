@@ -1,45 +1,27 @@
 <template>
   <div class="card">
     <div class="img-wrapper">
-      <img
-        alt='music'
-        width='100%'
-        height='100%'
-        :src="imgUrl+'?param=224y224'"
-        @load='onLoad'
-        @error='loadError'
+      <f-image :src="imgUrl+'?param=224y224'" />
+      <div
+        class="play-count"
+        v-if='playCount'
       >
-      <div class="play-count" v-if='playCount'>
         <svg-icon icon-class='stop' />
         {{Math.floor(playCount/10000)}}万
       </div>
       <div class="tips">{{tips}}</div>
-      <div
-        class="placeholder flex-center"
-        v-if="loading&&!error"
-      >
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <div
-        class="placeholder flex-center erro"
-        v-else-if="error"
-      >
-        <svg-icon
-          icon-class='error'
-          fill='#999'
-        />
-      </div>
     </div>
-    <div class="name" v-if='name'>
-      {{name}}
+    <div
+      class="name"
+      v-if='name'
+    >
+      <div class="text">{{name}}</div>
     </div>
   </div>
 </template>
 
 <script>
-
+import FImage from '@/components/FImage'
 export default {
   data() {
     return {
@@ -57,9 +39,12 @@ export default {
     playCount: {
       type: Number
     },
-    tips:{
-      type:String
+    tips: {
+      type: String
     }
+  },
+  components: {
+    FImage
   },
   methods: {
     // 图片加载完成
@@ -85,7 +70,6 @@ export default {
 }
 .card {
   width: 224px;
-  /* height: 300px; */
 }
 .img-wrapper {
   width: 224px;
@@ -148,6 +132,8 @@ export default {
   box-sizing: border-box;
   font-size: $font-sm;
   color: $font-color-dark;
-  @include text-ellipsis(2);
+  .text {
+    @include text-ellipsis(2);
+  }
 }
 </style>

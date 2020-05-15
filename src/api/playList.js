@@ -40,5 +40,14 @@ export const getRequestRankList = () => {
  */
 export const getRequestPlayListDetail = params => {
   return request.get('/playlist/detail', { params })
+}
 
+/**
+ * 专辑 id, 可获得专辑内容
+ * 
+ * @param {Object} params 
+ * @param {string} [params.id] 专辑 id
+ */
+export const getRequestAlbumDetail = params => {
+  return request.get('/album', { params })
 }

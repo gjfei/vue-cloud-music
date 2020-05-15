@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <keep-alive>
-      <router-view v-if="!$route.meta.noCache" />
-    </keep-alive>
-    <router-view v-if="$route.meta.noCache" />
+    <router-view />
     <music-player />
   </div>
 </template>
@@ -16,7 +13,6 @@ export default {
 </script>
 <style lang="scss">
 ::-webkit-scrollbar {
-  width: 0;
-  background: transparent;
+  display: none;
 }
 </style>

@@ -1,15 +1,17 @@
 <template>
   <div>
-    <nav-bar :title="$route.meta.title" titleAlign='left' @clickLeft='$router.back()'>
+    <nav-bar
+      :title="$route.meta.title"
+      titleAlign='left'
+      @clickLeft='$router.back()'
+    >
       <svg-icon
         slot="left"
         icon-class='arrow'
         fill='#333'
       />
     </nav-bar>
-    <keep-alive>
-      <router-view />
-    </keep-alive>
+    <router-view />
   </div>
 </template>
 

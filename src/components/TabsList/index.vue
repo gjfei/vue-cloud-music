@@ -84,9 +84,7 @@ export default {
       setScrollLeft(this.$refs.tabList, to, from)
     },
     tabList() {
-      this.$nextTick(() => {
-        this.initTabLine()
-      })
+      this.initTabLine()
     }
   },
   methods: {
@@ -98,20 +96,23 @@ export default {
           this.tabIndex = index
         }
       })
+      this.initTabLine()
     },
     // 设置线的位置以及宽度
     initTabLine() {
       if (this.showLine) {
-        const tabItem = this.$refs.tabItemText
-        const tabItemSize = []
-        tabItem.forEach(item => {
-          const size = {
-            width: item.offsetWidth + 8 + 'px',
-            transform: `translateX(${item.offsetLeft - 4}px)`
-          }
-          tabItemSize.push(size)
+        this.$nextTick(() => {
+          const tabItem = this.$refs.tabItemText
+          const tabItemSize = []
+          tabItem.forEach(item => {
+            const size = {
+              width: item.offsetWidth + 8 + 'px',
+              transform: `translateX(${item.offsetLeft - 4}px)`
+            }
+            tabItemSize.push(size)
+          })
+          this.tabItemSize = tabItemSize
         })
-        this.tabItemSize = tabItemSize
       }
     },
     // 点击tab
@@ -148,6 +149,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   position: absolute;
   top: 0;
   left: 0;

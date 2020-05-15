@@ -3,10 +3,11 @@
     <div
       class="popup"
       v-show="value"
+      :style="{zIndex:zIndex,backgroundColor:overlay?'rgba(0, 0, 0, 0.3)':''}"
       @click="close"
     >
       <div
-        class="popup-bottom round"
+        :class="['popup-'+position,{round:round}]"
         @click.stop="()=>{}"
       >
         <slot />
@@ -26,20 +27,40 @@ export default {
     value: {
       type: Boolean,
       default: true
+    },
+    overlay: {
+      type: Boolean,
+      default: true
+    },
+    zIndex: {
+      type: [Number, String],
+      default: 200
+    },
+    position: {
+      type: String,
+      default: 'bottom',
+      validator: val => {
+        const arr = ['top', 'bottom', 'left', 'right', 'center']
+        return arr.indexOf(val) != -1
+      }
+    },
+    round: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
     // 防止滚动穿透
     value(val) {
       if (val) {
-        document.body.classList.add('overflow-hidden');
+        document.body.classList.add('overflow-hidden')
       } else {
-        document.body.classList.remove('overflow-hidden');
+        document.body.classList.remove('overflow-hidden')
       }
     }
   },
-  components: {
-
+  destroyed(){
+    document.body.classList.remove('overflow-hidden')
   },
   methods: {
     close() {
@@ -55,8 +76,6 @@ export default {
   top: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: 200;
   &-bottom {
     width: 100%;
     background-color: #fff;
@@ -67,6 +86,18 @@ export default {
     max-height: 60vh;
     &.round {
       border-radius: 30px 30px 0 0;
+    }
+  }
+  &-top {
+    width: 100%;
+    background-color: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: 30vh;
+    max-height: 60vh;
+    &.round {
+      border-radius: 0 0 30px 30px;
     }
   }
   &-left {

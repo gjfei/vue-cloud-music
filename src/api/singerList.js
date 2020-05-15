@@ -7,153 +7,157 @@ export const getSingerClassify = () => {
   const type = [
     {
       name: '全部',
-      key: -1
+      val: -1
     },
     {
       name: '男歌手',
-      key: 1
+      val: 1
     },
     {
       name: '女歌手',
-      key: 2
+      val: 2
     },
     {
       name: '乐队',
-      key: 3
+      val: 3
     }
   ]
   const area = [
     {
       name: '全部',
-      key: -1
+      val: -1
     },
     {
       name: '华语',
-      key: 7
+      val: 7
     },
     {
       name: '欧美',
-      key: 96
+      val: 96
     },
     {
       name: '日本',
-      key: 8
+      val: 8
     },
     {
       name: '韩国',
-      key: 16
+      val: 16
     },
     {
       name: '其他',
-      key: 0
+      val: 0
     }]
   const initial = [
     {
+      name: '全部',
+      val: ''
+    },
+    {
       name: 'A',
-      key: 'A'
+      val: 'A'
     },
     {
       name: 'B',
-      key: 'B'
+      val: 'B'
     },
     {
       name: 'C',
-      key: 'C'
+      val: 'C'
     },
     {
       name: 'D',
-      key: 'D'
+      val: 'D'
     },
     {
       name: 'E',
-      key: 'E'
+      val: 'E'
     },
     {
       name: 'F',
-      key: 'F'
+      val: 'F'
     },
     {
       name: 'G',
-      key: 'G'
+      val: 'G'
     },
     {
       name: 'H',
-      key: 'H'
+      val: 'H'
     },
     {
       name: 'I',
-      key: 'I'
+      val: 'I'
     },
     {
       name: 'J',
-      key: 'J'
+      val: 'J'
     },
     {
       name: 'K',
-      key: 'K'
+      val: 'K'
     },
     {
       name: 'L',
-      key: 'L'
+      val: 'L'
     },
     {
       name: 'M',
-      key: 'M'
+      val: 'M'
     },
     {
       name: 'N',
-      key: 'N'
+      val: 'N'
     },
     {
       name: 'O',
-      key: 'O'
+      val: 'O'
     },
     {
       name: 'P',
-      key: 'P'
+      val: 'P'
     },
     {
       name: 'Q',
-      key: 'Q'
+      val: 'Q'
     },
     {
       name: 'R',
-      key: 'R'
+      val: 'R'
     },
     {
       name: 'S',
-      key: 'S'
+      val: 'S'
     },
     {
       name: 'T',
-      key: 'T'
+      val: 'T'
     },
     {
       name: 'U',
-      key: 'U'
+      val: 'U'
     },
     {
       name: 'V',
-      key: 'V'
+      val: 'V'
     },
     {
       name: 'W',
-      key: 'W'
+      val: 'W'
     },
     {
       name: 'X',
-      key: 'X'
+      val: 'X'
     },
     {
       name: 'Y',
-      key: 'Y'
+      val: 'Y'
     },
     {
       name: 'Z',
-      key: 'Z'
+      val: 'Z'
     }
   ]
-  return [{title:'首字母',list:initial}, {title:'类型',list:type},{title:'地区',list:area}]
+  return [{ title: '首字母', key: 'initial', list: initial }, { title: '分类', key: 'type', list: type }, { title: '语种', key: 'area', list: area }]
 }
 /**
  * 歌手列表
@@ -167,4 +171,26 @@ export const getSingerClassify = () => {
  */
 export const getRequestArtistList = params => {
   return request.get('/artist/list', { params })
+}
+
+/**
+ * 歌手列表
+ * 
+ * @param {Object} params 
+ * @param {string} params.id
+ */
+export const getRequestArtistDetail = params => {
+  return request.get('/artists', { params })
+}
+
+
+
+/**
+ * 传入专辑 id, 可获得专辑内容
+ * 
+ * @param {Object} params 
+ * @param {string} [params.id] 专辑 id
+ */
+export const getRequestAlbumDetail = params => {
+  return request.get('/album', { params })
 }

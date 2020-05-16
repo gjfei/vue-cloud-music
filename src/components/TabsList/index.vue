@@ -102,7 +102,7 @@ export default {
     initTabLine() {
       if (this.showLine) {
         this.$nextTick(() => {
-          const tabItem = this.$refs.tabItemText
+          const tabItem = this.$refs.tabItemText||[]
           const tabItemSize = []
           tabItem.forEach(item => {
             const size = {

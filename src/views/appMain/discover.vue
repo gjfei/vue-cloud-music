@@ -68,7 +68,7 @@ export default {
     return {
       swiperOptions: {
         loop: true,
-        passiveListeners:false,
+        passiveListeners: false,
         autoplay: {
           delay: 3000,
           disableOnInteraction: false,

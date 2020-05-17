@@ -27,7 +27,8 @@
     </div> -->
     <div
       class="search-list"
-      v-if='searchInfo'
+      ref="searchListRef"
+      v-if='searchStatus'
     >
       <tabs-list
         :tab-list='tabList'
@@ -37,10 +38,11 @@
       />
       <div
         class="song-list"
-        v-show="tabIndex===0"
+        v-if="tabIndex===0"
       >
         <song-card
-          v-for="(item,index) in searchInfo.songs"
+          :data-id='item.id'
+          v-for="(item,index) in searchResult"
           :key="item.id"
           :name='item.name'
           :singer='item.artists[0].name'
@@ -55,16 +57,19 @@
         v-show="tabIndex===1"
       >
         <play-list-card
-          v-for="item in searchInfo.albums"
+          v-for="item in searchResult"
           :key='item.id'
           :imgUrl='item.picUrl'
           :name='item.name'
           @click.native="goDetail(item.id)"
         />
       </div>
-      <div class="singer-list">
+      <div
+        class="singer-list"
+        v-if="tabIndex===2"
+      >
         <singer-card
-          v-for="item in searchInfo.artists"
+          v-for="item in searchResult"
           :key='item.id'
           :img-url='item.picUrl'
           :name='item.name'
@@ -75,16 +80,22 @@
       </div>
       <div
         class="album-list"
-        v-show="tabIndex===3"
+        v-if="tabIndex===3"
       >
         <play-list-card
-          v-for="item in searchInfo.playlists"
+          v-for="item in searchResult"
           :key='item.id'
           :imgUrl='item.coverImgUrl'
           :name='item.name'
           :play-count='item.playCount'
           @click.native="goDetail(item.id)"
         />
+      </div>
+      <div
+        class="video-list"
+        v-if="tabIndex===4"
+      >
+        开发中~
       </div>
     </div>
     <div
@@ -98,6 +109,7 @@
         class="hot-item flex-align-center"
         v-for="(item,index) in hotList"
         :key="index"
+        @click="searchHot(item.searchWord)"
       >
         <div class="index">
           {{index+1}}
@@ -150,7 +162,7 @@
               class="item"
               v-for="(item,index) in suggestList[key]"
               :key="index"
-              @click="getSearchList(item,suggestInfo[key].key)"
+              @click="getSearchList('')"
             >
               {{item.name}}
             </div>
@@ -177,19 +189,25 @@ export default {
       keywords: '',
       searchHistoryList: [],
       searchDefault: null,
+      searchStatus: false,
       tabList: [],
       tabIndex: 0,
+      searchResult: [],
       searchInfo: {
         songs: [],
         albums: [],
         artists: [],
         playlists: [],
+        videos: []
       },
+      endloading: false,
+      offset: 0,
+      isUpScrolling: true,
+      loading: false,
       hotList: [],
       showSuggest: false,
       suggestList: null,
-      suggestInfo: null,
-
+      suggestInfo: null
     }
   },
   components: {
@@ -208,6 +226,12 @@ export default {
     this.getSearchDefault()
     this.getSearchHot()
   },
+  mounted() {
+    document.addEventListener("scroll", this.handleScroll)
+  },
+  destroyed() {
+    document.removeEventListener('scroll', this.handleScroll)
+  },
   methods: {
     ...mapMutations(['setSongList', 'setSongIndex', 'setPlayerStatus']),
     getSearchDefault() {
@@ -220,8 +244,16 @@ export default {
         this.hotList = res.data
       })
     },
+    searchHot(keywords){
+      this.keywords = keywords
+      this.getSearchList()
+    },
     inputChange() {
-      debounce(this.getSearchSuggest(), 50)
+      if (this.keywords) {
+        debounce(this.getSearchSuggest(), 50)
+      } else {
+        this.searchStatus = false
+      }
     },
     getSearchSuggest() {
       if (this.keywords) {
@@ -236,24 +268,46 @@ export default {
             this.showSuggest = false
           }
         })
-
       } else {
         this.suggestList = null
         this.showSuggest = false
+      }
+    },
+    handleScroll(e) {
+      //获取滚动时的高度
+      const { searchStatus } = this
+      if (searchStatus) {
+        const bodyScrollTop = document.documentElement.scrollTop
+        const height = document.documentElement.clientHeight
+        const scrollHeight = document.documentElement.scrollHeight
+        if (scrollHeight - height - bodyScrollTop <= 500) {
+          this.isUpScrolling = true
+          this.getSearchList()
+        }
       }
     },
     getSearchList(item, type) {
       if (!!item) {
         this.switchPage(item.id, type)
       } else {
-        const { tabList, tabIndex } = this
+        console.log(123)
+        const { tabList, tabIndex, isUpScrolling, offset, endloading, loading } = this
+        if (!isUpScrolling || endloading || loading) return
+        this.loading = true
         type = tabList[tabIndex].key
         this.showSuggest = false
         const param = {
           keywords: this.keywords,
-          type
+          type,
+          offset
         }
+        this.$toast({
+          icon: 'loading',
+          message: '加载中~',
+          mask: false
+        })
         getRequestSearchList(param).then(res => {
+          this.$toast.hide()
           if (type === 1) {
             const fee = [1, 4, 16]
             const st = [-1, -200]
@@ -264,22 +318,31 @@ export default {
                 item.dis = false
               }
             })
-            this.searchInfo.songs = [...this.searchInfo.songs, ...res.result.songs]
           }
-          if (type === 10) {
-            this.searchInfo.albums = [...this.searchInfo.albums, ...res.result.albums]
+          for (let key in res.result) {
+            if (res.result[key] instanceof Array) {
+              if (this.offset === 0) {
+                this.searchResult = []
+              }
+              this.searchResult = [...this.searchResult, ...res.result[key]]
+            } else {
+              if (res.result[key] === this.searchResult.length) {
+                this.endloading = true
+              } else {
+                this.offset = this.offset + 30
+              }
+            }
           }
-          if (type === 1000) {
-            this.searchInfo.playlists = [...this.searchInfo.playlists, ...res.result.playlists]
-          }
-          if (type === 100) {
-            this.searchInfo.artists = [...this.searchInfo.artists, ...res.result.artists]
-          }
+          this.searchStatus = true
+          this.loading = false
         })
       }
     },
     tabChange(index) {
       this.tabIndex = index
+      this.offset = 0
+      this.searchResult = []
+      document.documentElement.scrollTop = 0
       this.getSearchList()
     },
     switchPage(id, type) {
@@ -291,14 +354,14 @@ export default {
       if (type === 10) {
         this.showSuggest = false
         this.$router.push({
-          path: `/albums-detail/${item.id}`
+          path: `/albums-detail/${id}`
         })
       }
       // 100 歌手
       if (type === 100) {
         this.showSuggest = false
         this.$router.push({
-          path: `/singer-detail/${item.id}`
+          path: `/singer-detail/${id}`
         })
       }
 
@@ -306,7 +369,7 @@ export default {
       if (type === 1000) {
         this.showSuggest = false
         this.$router.push({
-          path: `/play-list-detail/${item.id}`
+          path: `/play-list-detail/${id}`
         })
       }
       // 1014视频
@@ -326,7 +389,7 @@ export default {
     },
     goDetail(id) {
       const type = this.tabList[this.tabIndex].key
-      this.switchPage(id)
+      this.switchPage(id,type)
     }
   }
 }
@@ -354,6 +417,9 @@ export default {
   margin-bottom: 20px;
 }
 .search-list {
+  /* height: calc(100vh - 88px);
+  overflow-y: auto;
+  position: relative; */
   ::v-deep .nav {
     position: sticky;
     top: 88px;
@@ -454,7 +520,7 @@ export default {
     height: 100%;
     .title {
       padding: 0;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       font-weight: normal;
     }
     .item {

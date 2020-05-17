@@ -52,7 +52,7 @@ export const getSearchType = () => {
     },
     albums: {
       title: '专辑',
-      icon: 'play-list',
+      icon: 'albums',
       key: 10
     },
     artists: {

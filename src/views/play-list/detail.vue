@@ -183,7 +183,7 @@ export default {
     }
   },
   mounted() {
-    window.addEventListener("scroll", this.handleScroll)
+    document.addEventListener("scroll", this.handleScroll)
   },
   destroyed() {
     document.removeEventListener('scroll', this.handleScroll)

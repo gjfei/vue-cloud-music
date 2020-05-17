@@ -13,7 +13,11 @@ service.interceptors.response.use(
     }
   },
   err => {
-    console.log(err, "网络错误")
+    this.$toast({
+      icon: 'error',
+      message: err.message
+    })
+    console.log(err)
   }
 )
 

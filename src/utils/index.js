@@ -37,11 +37,9 @@ export const getRandomInt = (min, max) => {
 // 防抖
 export const debounce = (func, delay) => {
   let timer
-  console.log(timer)
   return function (...args) {
     if (timer) {
       clearTimeout(timer)
-      console.log(1)
     }
     timer = setTimeout(() => {
       func.apply(this, args)

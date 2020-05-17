@@ -2,7 +2,7 @@
   <div>
     <nav-bar
       titleAlign='left'
-      @clickLeft='$router.back()'
+      @clickLeft='goBack'
     >
       <svg-icon
         slot="left"
@@ -234,6 +234,10 @@ export default {
   },
   methods: {
     ...mapMutations(['setSongList', 'setSongIndex', 'setPlayerStatus']),
+    goBack(){
+      document.removeEventListener('scroll', this.handleScroll)
+      this.$router.back()
+    },
     getSearchDefault() {
       getRequestSearchDefault().then(res => {
         this.searchDefault = res.data

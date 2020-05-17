@@ -15,6 +15,7 @@ const routes = [
         component: () => import('@/views/appMain/home'),
         meta: {
           title: '推荐',
+          keepAlive:true
         }
       },
       {
@@ -22,7 +23,8 @@ const routes = [
         name: 'Discover',
         component: () => import('@/views/appMain/discover'),
         meta: {
-          title: '发现'
+          title: '发现',
+          keepAlive:true
         }
       },
       {
@@ -30,7 +32,8 @@ const routes = [
         name: 'CloudVillage',
         component: () => import('@/views/appMain/cloud-village'),
         meta: {
-          title: '云村'
+          title: '云村',
+          keepAlive:true
         }
       },
       {
@@ -38,7 +41,8 @@ const routes = [
         name: 'Video',
         component: () => import('@/views/appMain/video'),
         meta: {
-          title: '视频'
+          title: '视频',
+          keepAlive:true
         }
       }
     ]

@@ -10,7 +10,6 @@
         slot="title"
         :tab-list='tabList'
         :show-line='false'
-        :activeStyle='activeStyle'
         routeModel
         tab-key='title'
       />
@@ -31,12 +30,7 @@ export default {
   name: 'AppMain',
   data() {
     return {
-      tabList: [{ title: '我的', path: '/home' }, { title: '发现', path: '/' }, { title: '云村', path: '/cloud-village' }, { title: '视频', path: '/video' }],
-      activeStyle: {
-        color: '#333',
-        fontSize: '20px',
-        fontWeight: 'bold'
-      },
+      tabList: [{ title: '我的', path: '/home' }, { title: '发现', path: '/' }, { title: '云村', path: '/cloud-village' }, { title: '视频', path: '/video' }]
     }
   },
   methods: {
@@ -50,4 +44,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+::v-deep .active span {
+  color: #333;
+  font-size: 36px;
+  font-weight: bold;
+}
 </style>

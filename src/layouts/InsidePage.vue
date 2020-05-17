@@ -11,7 +11,9 @@
         fill='#333'
       />
     </nav-bar>
-    <router-view />
+    <keep-alive>
+      <router-view />
+    </keep-alive>
   </div>
 </template>
 

@@ -3,7 +3,7 @@
     <nav-bar
       titleAlign='left'
       :placeholder='false'
-      @clickLeft='$router.back()'
+      @clickLeft='goBack'
     >
       <svg-icon
         slot="left"
@@ -101,7 +101,7 @@
         <div class="list-top flex-align-center">
           <div
             class="flex-align-center"
-            @click="playMusic"
+            @click="playMusic(0)"
           >
             <svg-icon
               iconClass='stop-border'
@@ -138,7 +138,6 @@ import SongCard from '@/components/SongCard'
 import { getRequestPlayListDetail, getRequestAlbumDetail } from '@/api/playList'
 import { getRequestArtistDetail } from '@/api/singerList'
 import { mapMutations } from 'vuex'
-// import Grade from 'grade-js'
 export default {
   name: 'PlayListDetail',
   data() {
@@ -190,6 +189,10 @@ export default {
   },
   methods: {
     ...mapMutations(['setSongList', 'setSongIndex', 'setPlayerStatus']),
+    goBack(){
+      document.removeEventListener('scroll', this.handleScroll)
+      this.$router.back()
+    },
     // 歌单
     getPlayListDetail() {
       getRequestPlayListDetail(this.$route.params).then(res => {

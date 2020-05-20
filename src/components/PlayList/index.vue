@@ -4,14 +4,16 @@
     @scroll.passive='onScroll'
     ref="playListRef"
   >
-    <play-list-card
-      v-for="item in playList"
-      :key='item.id'
-      :imgUrl='item.coverImgUrl'
-      :name='item.name'
-      :playCount='item.playCount'
-      @click.native="goDetail(item.id)"
-    />
+    <div class="play-item">
+      <play-list-card
+        v-for="item in playList"
+        :key='item.id'
+        :imgUrl='item.coverImgUrl'
+        :name='item.name'
+        :playCount='item.playCount'
+        @click.native="goDetail(item.id)"
+      />
+    </div>
     <div
       class="loading flex-center"
       v-if="endloading || isUpScrolling"
@@ -103,13 +105,13 @@ export default {
 .list {
   display: flex;
   flex-wrap: wrap;
-  padding: 0 15px;
-  box-sizing: border-box;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   height: 100%;
-  ::v-deep .card {
-    margin: 8px;
+  .play-item {
+    width: 250px;
+    display: flex;
+    justify-content: center;
   }
 }
 .loading {
@@ -117,7 +119,7 @@ export default {
   width: 100%;
   text-align: center;
   .icon {
-     margin-right: 20px;
+    margin-right: 20px;
   }
   .loading-text {
     font-size: $font-sm;

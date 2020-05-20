@@ -17,6 +17,9 @@ module.exports = {
       }
     }
   },
+  configureWebpack: {
+    devtool: 'source-map'
+  },
   chainWebpack(config) {
     // 添加全局scss文件
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal']

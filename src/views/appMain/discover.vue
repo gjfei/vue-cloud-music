@@ -45,14 +45,18 @@
     <div class="recommend-list">
       <h1 class="title">推荐歌单</h1>
       <div class="list">
-        <play-list-card
+        <div
+          class="recommend-item"
           v-for="item in playList"
           :key='item.id'
-          :imgUrl='item.picUrl'
-          :name='item.name'
-          :playCount='item.playCount'
-          @click.native="goDetail(item.id)"
-        />
+        >
+          <play-list-card
+            :imgUrl='item.picUrl'
+            :name='item.name'
+            :playCount='item.playCount'
+            @click.native="goDetail(item.id)"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -190,13 +194,14 @@ export default {
   .list {
     display: flex;
     flex-wrap: wrap;
-    padding: 0 15px;
     box-sizing: border-box;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     height: 100%;
-    ::v-deep .card {
-      margin: 8px;
+    .recommend-item {
+      width: 33.33333vw;
+      display: flex;
+      justify-content: center;
     }
   }
 }

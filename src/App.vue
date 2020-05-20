@@ -13,8 +13,9 @@ export default {
   components: { MusicPlayer },
   computed: {
     key() {
+      // 需要缓存得组件必须设置key
       if (this.$route.meta.keepAlive) {
-        return this.$route.path
+        return this.$route.meta.key
       } else {
         return this.$route.path + new Date()
       }

@@ -3,10 +3,11 @@ import VueRouter from 'vue-router'
 import AppMain from '@/layouts/AppMain'
 import InsidePage from '@/layouts/InsidePage'
 Vue.use(VueRouter)
-
+// 需要缓存得组件必须设置key
 const routes = [
   {
     path: '/',
+    redirect:'/discover',
     component: AppMain,
     children: [
       {
@@ -15,16 +16,18 @@ const routes = [
         component: () => import('@/views/appMain/home'),
         meta: {
           title: '推荐',
-          keepAlive:true
+          key:'/',
+          keepAlive: true
         }
       },
       {
-        path: '/',
+        path: '/discover',
         name: 'Discover',
         component: () => import('@/views/appMain/discover'),
         meta: {
           title: '发现',
-          keepAlive:true
+          key:'/',
+          keepAlive: true
         }
       },
       {
@@ -33,7 +36,8 @@ const routes = [
         component: () => import('@/views/appMain/cloud-village'),
         meta: {
           title: '云村',
-          keepAlive:true
+          key:'/',
+          keepAlive: true
         }
       },
       {
@@ -42,7 +46,8 @@ const routes = [
         component: () => import('@/views/appMain/video'),
         meta: {
           title: '视频',
-          keepAlive:true
+          key:'/',
+          keepAlive: true
         }
       }
     ]

@@ -4,10 +4,12 @@
     @scroll.passive='onScroll'
     ref="playListRef"
   >
-    <div class="play-item">
+    <div
+      class="play-item"
+      v-for="item in playList"
+      :key='item.id'
+    >
       <play-list-card
-        v-for="item in playList"
-        :key='item.id'
         :imgUrl='item.coverImgUrl'
         :name='item.name'
         :playCount='item.playCount'

@@ -23,6 +23,7 @@ const createInstance = () => {
   return toastInstance
 }
 const Toast = (options = {}) => {
+  console.log(options)
   // 获取toast 实例
   const toast = createInstance()
   

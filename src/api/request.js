@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Toast from '@/components/Toast'
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -13,7 +14,7 @@ service.interceptors.response.use(
     }
   },
   err => {
-    this.$toast({
+    Toast({
       icon: 'error',
       message: err.message
     })

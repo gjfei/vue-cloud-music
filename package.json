@@ -9,7 +9,7 @@
     "start": "npm-run-all --parallel serve api"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.6.4",
     "fastclick": "^1.0.6",
     "normalize.css": "^8.0.1",
